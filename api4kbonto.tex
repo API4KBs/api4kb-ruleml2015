@@ -34,33 +34,71 @@ Athan Services (athant.com), West Lafayette, Indiana, USA\\
 API4KB ontologies target the basic administration
 services as well as the retrieval and the modification of expressions in machine-readable knowledge representation and reasoning (KRR) languages within multi-language, multi-nature knowledge platforms.
 KRR languages of concern include RDF, OWL, RuleML and Common Logic, and the knowledge platforms may support one or several of these.
-The ontologies provide a metamodel, or abstract syntax, for the communications, including a classification of knowledge source by an abstraction hierarchy as well as the use of performatives (assert, query, ...), languages, logics, dialects and formats. Finally, a framework is provided for defining operations on knowledge sources and platforms.
+The ontologies provide a metamodel, or abstract syntax, for the communications, including a classification of knowledge source by mutability, structure, and an abstraction hierarchy as well as the use of performatives (assert, query, ...), languages, logics, dialects and formats. Finally, a framework is provided for defining operations on knowledge sources and platforms.
 \end{abstract}
 
 %
 \section{Introduction}
 \label{intro}
 
-\section{Upper Levels}
+\section{Related Work}
+
+\section{Upper Levels of the Ontology}
 \label{upper}
 The principle upper-level concepts in the API4KB ontology are
 \begin{description}
 \item[Application] architectural elements that may interact with (communicate with, call or be called by) other elements
 \item[Channel] architectural element that forwards communications between Applications 
-\item[KnowledgeSource] source of machine-readable information
+\item[Knowledge Source] source of machine-readable information
 \item[Operation] function (possibly with side-effects)
 \item[Event] successful execution of an Operation request or call
+\item[Environment]
 \end{description}
-These definitions are intentionally vague so as to be adaptable to a variety of paradigms. To allow for the greatest generality, we will not assume that communications are local (in the virtual address space), synchronous - although these properties could apply in some architectures. Communication channels may in general by many-to-many and uni- or -bidirectional, but a particular communication will have a unique sender. We will allow for failure, either in communication or in execution. Communication nodes (Applications) may be single-sorted or many-sorted, with sorts being characterized by the kind of communications that may be received and sent, and by the kind of sender, recipient or channel they may be received from or sent to.
+These definitions are intentionally vague so as to be adaptable to a variety of implementation paradigms. 
 
-A particular kind of KnowledgeSource is a Description, and each instance of the principle upper-level concepts has a Description, which may be expressed as an RDF graph.
+\section{Architecture}
+To allow for the greatest generality, we will not assume that communications are local (in the virtual address space) or synchronous - although these properties could apply in some architectures. Communication Channels may in general be many-to-many and uni- or -bidirectional, but a particular communication will have a unique sender. (cite 0MQ) We will allow for failure, either in communication or in execution. Communication nodes (Applications) may be single-sorted or many-sorted, with sorts being characterized by the kind of communications that may be received and sent, and by the kind of sender, recipient or channel they may be received from or sent to.
 
-\section{Description Schemas}
-The properties that may be employed in Descriptions and the domains and ranges of these properties are specified in the following tables.
+\section{Knowledge Source Hierarchy}
+In a generalization of the FRBR (citation) Work-Expression-Manifestation-Item (WEMI) hierarchy of abstraction, we utilize an abstraction hierarchy tailored for expressions in machine-readable KRR languages.
+\begin{description}
+\item[Item] definition
+\item[IO] definition
+\item[Encoding] definition
+\item[Manifestation] definition
+\item[Expression] definition
+\item[Asset] definition
+\end{description}
 
+\section{Environments}
+\begin{description}
+\item[Language Environment] definition
+\item[Dialect Type Environment] definition
+\item[Format Type Environment] definition
+\end{description}
 
+\section{Mutability}
+Knowledge Sources are characterized as mutable and immutable. A Linearly-Mutable Knowledge Source is a container that has, at any point in its linear history, a state that is fully represented by an immutable knowledge source at a particular abstraction level. The structure and content, even the language, may change over the history of a single knowledge source. However the abstraction level of a Mutable Knowledge Source is unchanging. 
 
-\section{Conclusion}
+An Immutable Knowledge Source is called a Knowledge Resource. (cite RDF) Immutable does not necessarily mean static - a stream of knowledge, e.g. a feed from a sensor, may be considered a Knowledge Resource that is revealed over time.
+
+\section{Structure}
+We generalize the OntoIOp/DOL concept for distributed ontologies. (cite DOL) A Basic Knowledge Expression is an unstructured set of expressions in a single KRR Language. Basic Knowledge Resources at other abstraction levels are defined similarly. A Structured Knowledge Expression is a collection of Knowledge Expressions, Structured or Basic. To assist in defining operations on Structured Knowledge Expressions while still maintaining generality, the collection is required to form a monad-like structure on the Knowledge Expression type. (cite)
+
+\section{Performatives}
+
+\section{Descriptions}
+A particular kind of Knowledge Source is a Description, and each instance of the principle upper-level concepts has a Description, which may be expressed as an RDF graph. The properties that may be employed in Descriptions and the domains and ranges of these properties are specified in the following tables.
+
+%some tables
+
+\section{Operations, Events, Proficiencies and Roles}
+
+%some more tables
+
+\section{Discussion
+
+\section{Conclusion and Future Work}
 \label{conc}
 
 %
