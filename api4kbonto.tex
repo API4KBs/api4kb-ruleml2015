@@ -9,8 +9,9 @@
 \usepackage{footnote}
 \usepackage{hyperref}
 \usepackage{enumitem}
+\usepackage{rotating}
 %
-\title{API4KB Ontologies: a Meta-API for Hybrid Knowledge Platforms}
+\title{API4KB Ontologies: a Meta-API for Heterogeneous Knowledge Platforms}
 
 \titlerunning{API4KB Ontologies}
 
@@ -18,7 +19,7 @@
 %
 \begin{document}
 %
-\author{Davide Sottara\inst{1}\ \ Tara Athan\inst{2}}
+\author{Davide Sottara\inst{1}\ \ Tara Athan\inst{2}\ \ Adrian Paschke\inst{3}}
 
 \institute{
 Arizona State University\\
@@ -26,75 +27,289 @@ Arizona State University\\
 \and
 Athan Services (athant.com), West Lafayette, Indiana, USA\\
 \email{taraathan@gmail.com}
+\and
+AG Corporate Semantic Web, Freie Universitaet Berlin, Germany\\
+\email{paschke@inf.fu-berlin.de}
 }
 %
 \maketitle
 
 \begin{abstract}
 API4KB ontologies target the basic administration
-services as well as the retrieval and the modification of expressions in machine-readable knowledge representation and reasoning (KRR) languages within multi-language, multi-nature knowledge platforms.
-KRR languages of concern include RDF, OWL, RuleML and Common Logic, and the knowledge platforms may support one or several of these.
-The ontologies provide a metamodel, or abstract syntax, for the communications, including a classification of knowledge source by mutability, structure, and an abstraction hierarchy as well as the use of performatives (assert, query, ...), languages, logics, dialects and formats. Finally, a framework is provided for defining operations on knowledge sources and platforms.
+services as well as the retrieval and the modification of expressions in machine-readable knowledge representation and reasoning (KRR) languages within heterogeneous (multi-language, multi-nature) knowledge platforms.
+KRR languages of concern include but are not limited to RDF(S), OWL, RuleML and Common Logic, and the knowledge platforms may support one or several of these.
+The ontologies provide a metamodel, or abstract syntax, for the communications between architectural elements, including a classification of knowledge source by mutability, structure, and an abstraction hierarchy as well as the use of performatives (assert, query, ...), languages, logics, dialects and formats. Finally, a framework is provided for defining operations on knowledge sources and platforms.
 \end{abstract}
 
 %
 \section{Introduction}
 \label{intro}
 
+% RDF graph, RDF source, RDF dataset
+% http://www.w3.org/TR/2014/REC-rdf11-mt-20140225/
+
+% OWL2 ontology version, ontology document, ontology series
+
 \section{Related Work}
 
-\section{Upper Levels of the Ontology}
+\section{API4KB Ontology}
+\subsection{Upper Levels of the Ontology}
 \label{upper}
 The principle upper-level concepts in the API4KB ontology are
 \begin{description}
-\item[Application] architectural elements that may interact with (communicate with, call or be called by) other elements
-\item[Channel] architectural element that forwards communications between Applications 
-\item[Knowledge Source] source of machine-readable information
-\item[Operation] function (possibly with side-effects)
-\item[Event] successful execution of an Operation request or call
-\item[Environment]
+\item[Application] architectural elements that may interact with (communicate with, call or be called by) other elements.
+\item[Channel] architectural element that forwards communications between applications.
+\item[Knowledge Source] source of machine-readable information. Examples: an RDF graph, a mutable RDF source, or an RDF dataset with specified semantics.
+\item[Environment] structure of mappings. The domain and range of the mappings are the members of the environment. A composable environment contains the mappings that are the composition of all compatible pairs of its mappings. An associative environment satisfies an associative property on composition of its mappings. A categorical environment is an associative environment that includes an identity mapping for every member. Example: a KRR language environment containing semantics-preserving translations from RDF and OWL into Common Logic.
+\item[Knowledge Operation] function (possibly with side-effects) having a knowledge source or environment as input or output. Examples: creating, modifying, deleting, parsing, translating, querying, downloading, or reasoning about a knowledge source.
+\item[Knowledge Event] successful execution of a knowledge operation.
 \end{description}
 These definitions are intentionally vague so as to be adaptable to a variety of implementation paradigms. 
 
-\section{Architecture}
-To allow for the greatest generality, we will not assume that communications are local (in the virtual address space) or synchronous - although these properties could apply in some architectures. Communication Channels may in general be many-to-many and uni- or -bidirectional, but a particular communication will have a unique sender. (cite 0MQ) We will allow for failure, either in communication or in execution. Communication nodes (Applications) may be single-sorted or many-sorted, with sorts being characterized by the kind of communications that may be received and sent, and by the kind of sender, recipient or channel they may be received from or sent to.
+\subsection{Architecture}
+To allow for the greatest generality, we will not assume that communications are local (in the virtual address space) or synchronous - although these properties could apply in some architectures. Communication channels may in general be many-to-many and uni- or -bidirectional, but a particular communication will have a unique sender. (cite low-level 0MQ and high-level RuleResponder SEDA Architecture http://responder.ruleml.org supporting e.g. JMS, ActiveMQ, and RabbitMQ) Multi-source communications are not modelled directly, but are emulated by knowledge sources that are accessed as streams. We will allow for failure, either in communication or in execution, but do not specify any particular failure recovery strategy. Communication nodes (applications) may be single-sorted or many-sorted, with sorts being characterized by the kind of communications that may be received and sent, and by the kind of sender, recipient or channel they may be received from or sent to. 
 
-\section{Knowledge Source Hierarchy}
-In a generalization of the FRBR (citation) Work-Expression-Manifestation-Item (WEMI) hierarchy of abstraction, we utilize an abstraction hierarchy tailored for expressions in machine-readable KRR languages.
+The API4KB architectural elements are categorized according to the following competency questions in the ontology.
+
+\begin{enumerate}
+\item What are the entities that are communicating in the distributed system?
+\item How do they communicate, or, more specifically, what communication paradigm is used?
+\item What (potentially changing) roles and responsibilities do they have in the overall architecture?
+\item What is the mapping of the API4KB elements into a physical distributed infrastructure?
+\end{enumerate}
+
+\textbf{Communicating Entities}
+
 \begin{description}
-\item[Item] definition
-\item[IO] definition
-\item[Encoding] definition
-\item[Manifestation] definition
-\item[Expression] definition
-\item[Asset] definition
+    \item [Node]: In primitive environments such as sensor networks, operating systems does not provide any abstractions, therefore nodes communicate.
+    \item [Process]: In most environments processes are supplemented by threads, so threads are more the endpoints of communications.
+    \item [Object]: Computation consists of a number of interacting distributed objects representing units of decomposition for the problem domain. Objects are accessed via interfaces.
+    \item [Component]: Resemble objects in that they offer problem-oriented abstractions, also accessed via interfaces. They specify not only their interfaces but also the assumptions they make in terms of other components/interfaces that must be present for a component to fulfill its function.
+    \item [Service] and [Agent]: Software application which is identified via URI and can interact with other software agents (typically using a higher-level coordination and negotiation protocol).
 \end{description}
 
-\section{Environments}
+\textbf{Communication Paradigms}
+
 \begin{description}
-\item[Language Environment] definition
-\item[Dialect Type Environment] definition
-\item[Format Type Environment] definition
+    \item [Strongly Coupled Communication]: Low-level, direct API access requiring direct knowledge of the (downloaded) API4KB [Artifacts] or inter-process communication in distributed systems with ad-hoc network programming including message parsing-primitives.
+    \item [Loosely Coupled Communication]: Loosely coupled remote invocation in a two-way exchange via an [Interface] (RPC/RMI/Component/Agent) between communicating entities.
+    \item [Decoupled Communication]: Indirect communication, where sender and receiver are time and space uncoupled via an [Intermediary].
 \end{description}
 
-\section{Mutability}
-Knowledge Sources are characterized as mutable and immutable. A Linearly-Mutable Knowledge Source is a container that has, at any point in its linear history, a state that is fully represented by an immutable knowledge source at a particular abstraction level. The structure and content, even the language, may change over the history of a single knowledge source. However the abstraction level of a Mutable Knowledge Source is unchanging. 
+\textbf{Roles}
 
-An Immutable Knowledge Source is called a Knowledge Resource. (cite RDF) Immutable does not necessarily mean static - a stream of knowledge, e.g. a feed from a sensor, may be considered a Knowledge Resource that is revealed over time.
+For instance, client-server, peer-to-peer, agent architecture styles.
 
-\section{Structure}
-We generalize the OntoIOp/DOL concept for distributed ontologies. (cite DOL) A Basic Knowledge Expression is an unstructured set of expressions in a single KRR Language. Basic Knowledge Resources at other abstraction levels are defined similarly. A Structured Knowledge Expression is a collection of Knowledge Expressions, Structured or Basic. To assist in defining operations on Structured Knowledge Expressions while still maintaining generality, the collection is required to form a monad-like structure on the Knowledge Expression type. (cite)
+\begin{description}
+    \item [Client]: Client knows server (after discovery) and requests a particular knowledge resource service
+    \item [Server]: Server is the central entity and provider of services and knowledge resources
+    \item [Peer]: Peer is client/requester and provider ([Servant]) at the same time. Knowledge resources are shared between peers and can be accessed from other peers.
+    \item [Agent]: an abstraction from the client-server or peer-to-peer architecture style into [orchestrated] or [choreography style] agent architectures.
+\end{description}
 
-\section{Performatives}
+\textbf{Placement}
+
+\begin{description}
+    \item [Partitioning]: API4KB services provided by multiple servers by partitioning a set of objects in which the service is based and distribute them between multiple-services.
+    \item [Replication]: Server maintain replicated API4KB server copies of them on several hosts (horizontal replication) or distributed API4KB functions into distributed peers.
+    \item [Caching] and [Proxying]: A [Cache] stores recently used knowledge resources. Caches might be co-located with each client or located in a Proxy. [Proxy] provides a surrogate or placeholder for a API4KB knowledge object to control access to it. 
+    \item [Mobile]: Mobile (executable) code that is downloaded to a client or mobile components/agents, which are running programs (both code and data/resources + state) that travel from one computer / environment to another.
+\end{description}
+
+\subsection{Knowledge Source Hierarchy}
+We have developed a hierarchy of \emph{knowledge source level} of abstraction that is a generalization of the FRBR (citation) Work-Expression-Manifestation-Item (WEMI) hierarchy of abstraction tailored for machine-readable KRR languages. The fundamental building blocks of knowledge sources are \emph{basic knowledge resources}, which are immutable knowledge sources without structure.
+Subclasses of basic knowledge resource are defined according their knowledge source level:
+\begin{description}
+\item[Expression] A \emph{basic knowledge expression} is a well-formed formula in the abstract syntax of a KRR language.
+Example: KE1 - the instance of the OWL 2 DL abstract syntax for an ontology version from an ontology series, differing from other versions of the series only in the natural language definitions.
+\item[Manifestation] A \emph{basic knowledge manifestation} is a character-based embodiment of a knowledge expression in a concrete dialect. Example:KM1 - the OWL/RDF XML DOM instance of example KE1.
+\item[Item] A \emph{basic knowledge item} is a single exemplar of a knowledge manifestation in a particular location. Example: KI1 - a file on a network server embodying KM1.
+\item[Asset] A \emph{basic knowledge asset} is an equivalence class of basic knowledge expressions determined by the equivalence relation of an asset environment. Examples: KA1 - an equivalence class of basic knowledge expressions in OWL2 DL, according to a semantics-preserving environment for the OWL2 DL language. 
+\end{description}
+
+\subsection{Mutability}
+Knowledge sources are characterized as mutable or immutable. An immutable knowledge source is called a \emph{knowledge resource}. (cite RDF) In this context, Immutable does not necessarily mean static;  a stream of knowledge, e.g. a feed from a sensor, may be considered an \emph{observable} knowledge resource that is revealed over time, as described further in Section~\ref{structure}.
+
+A \emph{mutable knowledge source} is a container that has, at any point in time, a state that is fully represented by a knowledge resource. The language, structure and content of a mutable knowledge source may change over time; however, the abstraction level is unchanging. The structure of the state of a mutable knowledge source can be specialized in order to emulate common dynamic patterns. Simple examples include state as a basic or set-structured knowledge resource (linear history), a key-value map (branching history), a sequence (transactional). The State monad mentioned in Section~\ref{structure} provides a convenient structure where the execution of state transitions is delegated to the state itself.
+
+
+\subsection{Structure}
+\label{structure}
+We generalize the OntoIOp/DOL concept for structured ontologies to define a concept of structured knowledge resource for each level of abstraction. (cite DOL) A \emph{structured knowledge source} is a collection whose components are knowledge sources of the same level of abstraction. 
+\begin{description}
+\item[Expression] A \emph{structured knowledge expression} is a collection of knowledge expressions, which are not necessarily in the same language and may themselves have structure. Example: KE2 - a heterogeneous structure of RDF graphs, OWL and Common Logic expressions.
+\item[Manifestation] A \emph{structured knowledge manifestation} is a collection of knowledge manifestations, which are not necessarily in the same language or dialect and may themselves have structure. Example: KM2 -  a heterogeneous structure of an RDF Turtle and OWL Manchester as strings and, OWL/RDF, RuleML and Common Logic XCL2 as XML DOM documents.
+\item[Item] A \emph{structured knowledge item} is a collection of knowledge items, which are not necessarily in the same language, dialect, format or location, and may themselves have structure. Example: KI2 -  a heterogeneous structure of an RDF triple store, an RDF/XML sensor feed, a MySQL database accessed through an ODBA source schema providing a mapping to OWL, RuleML XML files on a local hard drive and Common Logic XCL2 files on a network server in a content management system.
+\item[Asset] A \emph{structured knowledge asset} is a collection of knowledge assets, which are not necessarily according to the same environment, but where there is a unique language that is the focus of the environment of each component. Example: KA2 - a heterogeneous structure of assets conceptualized from RDF, OWL and Common Logic expressions, according to environments that provides translations from RDF or OWL into Common Logic.
+\end{description}
+ 
+\begin{description}
+\item[exemplify] to instantiate (a knowledge manifestation) in a particular format and at a particular location (address in some virtual address space)
+
+Inverse: prototype.
+\item[embody] to represent (a knowledge expression) in a concrete syntax (dialect) of some particular KRR language
+
+Inverse: parse.
+\item[express] to represent (a knowledge asset) in the abstract syntax of some particular KRR language
+
+Inverse: conceptualize.
+\end{description}
+
+To assist in defining operations on structured knowledge sources while still maintaining generality, its collection data structure is required to form a monad data structure on the Knowledge Resource types. (cite) Collections that satisfy these requirement include sets, bags and lists, but others structures also meet these requirements, including 
+\begin{description}
+\item [Option] handles nullability, has subclasses Some, which wraps a knowledge resource, and None, which is empty
+\item [Try] handles exceptions, has subclasses Success, which wraps a knowledge resource, and Failure, which wraps a (non-fatal) exception
+\item [Future] handles concurrency, wraps a value that becomes available at some time
+\item [IO] handles IO side-effects, wraps a knowledge resource and an \emph{item configuration}
+\item [Task] handles general side-effects, wraps a knowledge resource and a description of a side-effectful task
+\item [Observable] handles streams, wraps a sequence of knowledge resources that become available over time
+\item [Key-Value Map] handles labelled structures, a knowledge resource is associated with each key
+\item [State] handles state, wraps a knowledge resource (the state) and implements state transistions
+\end{description}
+
 
 \section{Descriptions}
-A particular kind of Knowledge Source is a Description, and each instance of the principle upper-level concepts has a Description, which may be expressed as an RDF graph. The properties that may be employed in Descriptions and the domains and ranges of these properties are specified in the following tables.
+As stated above, we do not make assumptions regarding the drivers for communications, e.g. an implementation may be message-driven, event-driven, or a combination of both. However, our ontology takes a message-centric perspective. 
+
+A \emph{knowledge source description} is a particular kind of knowledge source whose subject matter is another knowledge source, which may be expressed as an OWL ontology of individuals or an RDF graph. The properties and classes in the API4KB namespace that may be employed in knowledge source descriptions are listed in the following tables and formalized in the API4KB OWL ontologies. Further, IRIs in other namespaces may be used to express metadata within a knowledge source description. A description about the description itself may be referenced through an IRI, or included within the description explicitly through the :hasDescription property,  OWL annotations, or as an RDF dataset. (cite)
 
 %some tables
+\begin{table}[h]
+\begin{minipage}[b]{0.45\linewidth}
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Key} & \textbf{Value} \\ \hline
+Y            & exactly 1      \\ \hline
+Y+           & 1 or more      \\ \hline
+Y?           & 0 or 1         \\ \hline
+Y*           & 0 or more      \\ \hline
+N            & exactly 0      \\ \hline
+I[+?*]       & indirect      \\ \hline
+\end{tabular}
+\caption{Legend}
+\label{legend}
+\end{minipage}
+\hspace{0.5cm}
+\begin{minipage}[b]{0.45\linewidth}
+\centering
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Abbreviation} & \textbf{Expansion} \\ \hline
+kr:            & :KnowledgeResource      \\ \hline
+ka:            & kr:Asset      \\ \hline
+ke:            & kr:Expression      \\ \hline
+km:            & kr:Manifestation      \\ \hline
+ki:            & kr:Item      \\ \hline
+\end{tabular}
+\caption{Prefix Mappings}
+\label{abbreviations}
+\end{minipage}
+\end{table}
+
+\section{Knowledge Resources}
+\begin{table}[h]
+\begin{tabular}{|l|l|l|l|l|l|l|l|}
+\hline
+\textbf{Property}  & \textbf{Range}     
+& \textbf{ka:}
+& \textbf{ke:}
+& \textbf{km:}
+& \textbf{ki:}
+\\ \hline
+:hasIdentifier      & :Identifier        & Y?                & Y?                     & Y?             & Y?               \\ \hline
+:level              & ks:Level           & Y                 & Y                      & Y              & Y                \\ \hline
+:usesPerformative   & :Performative      & I*                & Y*                     & I*              & I*                \\ \hline
+:hasLocator         & :address           & Y?                & Y?                     & Y?             & Y                \\ \hline
+:usesLanguage       & :Language       & I*                & Y*                     & I*             & I*               \\ \hline
+:usesDialect        & km:Dialect        & I*                 & I*                      & Y*             & I*               \\ \hline
+:usesConfiguration  & ki:Configuration   & I*                 & I*                      & I*            & Y*               \\ \hline
+:accordingTo        & kr:Environment  & Y*                 & I*                      & Y              & I*                \\ \hline
+:isBasic            & xsd:boolean        & Y                 & Y                      & Y              & Y                \\ \hline
+:hasMetaData        & :KnowledgeResource & Y*                & Y*                     & Y*             & Y*               \\ \hline
+:hasDescription   & :KnowledgeResource       & Y?                & Y?                     & Y?             & Y?   \\ \hline           
+\end{tabular}
+\caption{Knowledge Resource Essential Properties}
+\label{kronto}
+\end{table}
+
+\begin{table}[h]
+\begin{tabular}{|l|l|l|l|l|l|l|l|}
+\hline
+\textbf{Property}  &\textbf{Domain}  & \textbf{Range}  & \textbf{Inverse}      
+\\ \hline
+:exemplify (?)   & ki:        & km:     & :prototype (*)         \\ \hline
+:embody (?)      & km:        & ke:     & :parse (*)             \\ \hline
+:express (*)     & ke:        & ka:     & :conceptualize (*)     \\ \hline
+\end{tabular}
+\caption{Knowledge Resource Elevation Properties}
+\label{krelevate}
+\end{table}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|}
+ \hline
+\textbf{Property} & \textbf{Range} & \textbf{ke:Language} & \textbf{km:Dialect}  & \textbf{ki:Configuration} \\ \hline
+:hasIdentifier    & :Identifer     & Y                    & Y                   & Y                       \\ \hline
+:hasLocator       & :address       & N                    & N                   & Y?                        \\ \hline
+:supports         & :Logic         & Y                    & I                   & I                         \\ \hline
+:usesLanguage     & ke:Language    & N                    & Y                   & I                         \\ \hline
+:usesDialect      & km:Dialect     & N                    & N                   & Y                         \\ \hline
+:usesFormat       & ki:Format     & N                    & N                   & Y                         \\ \hline
+:location         & :address       & N                    & N                   & Y       \\ \hline                  
+\end{tabular}
+\caption{Knowledge Resource Language, Dialect and Configuration Properties}
+\label{krlang}
+\end{table}
+
+\subsection{Environments}
+\begin{description}
+\item[Language Environment] definition
+\begin{description}
+\item[Focused Language Environment] definition
+\item[Preserving Language Environment] definition
+\item[Asset Environment] definition
+\end{description}
+\item[Manifestation Environment] definition
+\item[Item Environment] definition
+\end{description}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|}
+ \hline
+\textbf{Property} & \textbf{Range} & \textbf{ka:Environment}   \\ \hline
+:hasIdentifier    & :Identifer     &  Y?                       \\ \hline
+:mapping          & :Mapping       &  Y*                       \\ \hline
+:focus            & ke:Language    &  Y                       \\ \hline
+:preserves        & :EquivalenceRelation    &  Y?              \\ \hline
+
+\end{tabular}
+\caption{Asset Environment Properties}
+\label{krenvironment}
+\end{table}
+
+\subsection{Performatives}
+The KRR Languages covered by API4KB include ontology languages (e.g. OWL), query languages (e.g. SPARQL), languages that describe the results of queries, and declarative executable languages (e.g. ECA RuleML). Knowledge resources expressed in ontology languages may be considered as informative, e.g. when received from an untrusted source, or as providing an \emph{assert}. Query resources may also be considered informative, e.g. when the sender is unauthorized, or as providing a \emph{query} performative. Some languages (e.g. RuleML) have syntactic structures for assert, retract and query performatives, and are extensible to other actions.
 
 \section{Operations, Events, Proficiencies and Roles}
 
-%some more tables
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|l|l|l|}
+ \hline
+\textbf{Property} & \textbf{Range} & \textbf{ev:} & \textbf{op:}  & \textbf{pro:} & \textbf{role:} \\ \hline
+:hasIdentifier    & :Identifer     & Y?           & Y             & Y             & Y              \\ \hline
+:exposes          & op:            & N            & N             & Y+            & I+              \\ \hline
+:requires         & pro:           & N            & N             & N             & Y+              \\ \hline
+:isEventOf        & op:            & Y            & N             & N             & N              \\ \hline
+:isExecutedBy     & :Application   & Y            & N             & N             & N              \\ \hline
+:isFilledBy       & :Application   & N            & N             & N             & Y              \\ \hline
+\end{tabular}
+\caption{Knowledge Resource Description Schemas Part IV}
+\label{krqschemas}
+\end{table}
 
 \section{Discussion}
 
