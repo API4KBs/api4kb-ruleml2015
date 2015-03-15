@@ -79,14 +79,14 @@ The communication entities fulfill different roles and responsibilities (client,
 Given this variety of architectural requirements, an abstraction is required to facilitate the interchange, deployment, revision and ultimately consumption of formal, declarative pieces of knowledge within a knowledge-driven application. We assembled a multi-disciplinary working group with the goal of creating a standard API for the interaction with the Knowledge Platform at the core of a KDA called API4KB. %just realized we should have migrated to API4KP...
 % describe the problem and the problem solution + contribution
 To provide a semantic foundation for the operations and their arguments, we have created a metamodel of knowledge sources and expressed it as an OWL ontology.
-After providing some background notions in Section \ref{sec:bg}, we will describe the primary concepts in the ontology in Section \ref{sec:ontology}. In particular, a complete definition of the notion of (structured) knowledge resource will be provided in Section \ref{sec:structure}. 
+After providing some background notions in Section \ref{sec:bg}, we will describe the primary concepts in the metamodel in Section \ref{sec:metamodel}. In particular, a complete definition of the notion of (structured) knowledge resource will be provided in Section \ref{sec:structure}. 
 
 \todo[inline]{Finally, use cases and related works....(complete after final use cases are written }
 
 
-\section{Background}
+\section{The API4KB RFP and OntoIOp RFPs}
 \label{sec:bg}
-\subsection{The API4KB RFP + DOL}
+%\subsection{The API4KB RFP + DOL}
 
 In the early to mid-2000s, a number of Object Management Group (OMG) members developed applications that explored various aspects of semantic technologies.  As practitioners of Model Driven Architecture (MDA) methods \cite{MDA} and information architecture (IA), they recognized limitations in the ability to modularize and reuse aspects of semantic technology in the applications they were constructing.  IA in this context is focused on defining, developing, and managing information,
 and in particular information models, in order to separate content and context-specific
@@ -111,29 +111,18 @@ Language) language. The OntoIOp RFP asked for:
 
 By early 2014, the DOL and API4KB submission teams began working together to provide a language and set of related interfaces to solve the problems identified by both groups independently. An initial submission for DOL \cite{DOL} was presented to the OMG in November 2014, and is currently under revision, with a planned submission for adoption in June 2014.  The API4KBs initial submission, which leverages the DOL effort, will be submitted initially in September 2015, with a planned revision for adoption in early 2016.  The work described in this paper summarizes some of the findings of the API4KBs team.
 
-
-
-
-% This material is out of place
-% ****************
-
-
-
-
-
 %Example 4 Query results may reflect the structure of the structured knowledge asset to which they are applied. For example, a query applied to a Try of a derived knowledge asset may return a Failure if an exception arises in the derivation of the knowledge asset.
-
-
 
 %Combining examples 1-4, streaming data from sensors is provided with semantics by the language environment, combined with ECA rulebases and failure management based on a Try structure for a reliable reactive semantic CEP system.
 % ****************
 
 
-\section{API4KB Ontology}
-\label{sec:ontology}
-\subsection{Upper Levels of the Ontology}
+\section{API4KB Metamodel}
+\label{sec:metamodel}
+\todo{transition needed}
+\subsection{Upper Levels of the Metamodel}
 \label{sec:upper}
-The principle upper-level concepts in the API4KB ontology are
+The principle upper-level concepts in the API4KB metamodel are
 \begin{description}
 %\item[Communicating Entity] architectural elements that may communicate (initiate, forward or receive communications) with other elements.
 \item[Knowledge Source] source of machine-readable information with definite semantics. Examples: an RDF graph, a mutable RDF source, an RDF dataset with specified semantics, or a relational database with a mapping to an ontology.
@@ -246,7 +235,7 @@ In API4KB, we generalize the concept of environment as follows.
 \subsection{Performatives}
 The Knowledge Query and Manipulation Language (KQML) \todo{cite KQML} introduced the concept of "performatives, which was later extended by FIPA-ACL\todo{cite FIPA-ACL}.
 
-The KRR Languages covered by API4KB include ontology languages (e.g. OWL), query languages (e.g. SPARQL), languages that describe the results of queries, events and actions, and declarative executable languages (e.g. Prolog, ECA RuleML, DOL). In the latter case, the languages typically includes syntactic constructs for performatives, e.g. \emph{assert}, \emph{query}, and the description of a knowledge resource may include a list of the performatives that are used within it.  Performatives will be modelled as \emph{operations} as defined in Section~\ref{op}.
+The KRR Languages covered by API4KB include ontology languages (e.g. OWL), query languages (e.g. SPARQL), languages that describe the results of queries, events and actions, and declarative executable languages (e.g. Prolog, ECA RuleML, DOL). In the latter cases, the languages typically includes syntactic constructs for performatives, e.g. \emph{assert}, \emph{query}, and the description of a knowledge resource may include a list of the performatives that are used within it.  Performatives will be modelled as \emph{operations} as defined in Section~\ref{op}.
 
 % Assert- 
 
@@ -254,7 +243,7 @@ The KRR Languages covered by API4KB include ontology languages (e.g. OWL), query
 
 
 \subsection{Descriptions}
-As stated above, we do not make assumptions regarding the drivers for communications, e.g. an implementation may be message-driven, event-driven, or a combination of both. However, our ontology takes a message-centric perspective, with the message body being a description of a knowledge source or a knowledge operation.
+As stated above, we do not make assumptions regarding the drivers for communications, e.g. an implementation may be message-driven, event-driven, or a combination of both. However, our metamodel takes a message-centric perspective, with the message body being a description of a knowledge source or a knowledge operation.
 
 A \emph{knowledge source description} is a knowledge resource whose subject matter is another knowledge source, which may be expressed, e.g., as an OWL ontology of individuals or an RDF graph. The properties and classes in the API4KB namespace that may be employed in knowledge source descriptions are listed in the following tables and formalized in the API4KB OWL ontologies. Further, IRIs in other namespaces may be used to express metadata within a knowledge source description. A description about the description itself may be referenced through an IRI, or included within the description explicitly through the :hasDescription property,  OWL annotations, or as an RDF dataset. (cite)
 
@@ -320,7 +309,7 @@ xsd:            & \url{http://XSD_Datatype_namespace }     \\ \hline
 :hasMetaData        & :KnowledgeResource & Y*                & Y*                     & Y*             & Y*               \\ \hline
 :hasDescription   & :KnowledgeResource       & Y*                & Y*                     & Y*             & Y*   \\ \hline
 \end{tabular}
-\caption{Knowledge Resource Ontology}
+\caption{Knowledge Resource Metamodel}
 \label{kronto}
 \end{table}
 
@@ -350,7 +339,7 @@ xsd:            & \url{http://XSD_Datatype_namespace }     \\ \hline
 :usesFormat       & ki:Format     & N                    & N                   & Y                         \\ \hline
 :location         & :Address       & N                    & N                   & Y       \\ \hline
 \end{tabular}
-\caption{Knowledge Resource Configuration Ontology}
+\caption{Knowledge Resource Configuration Metamodel}
 \label{krlang}
 \end{table}
 
@@ -364,7 +353,7 @@ xsd:            & \url{http://XSD_Datatype_namespace }     \\ \hline
 :focus            & T:              &  Y?                       \\ \hline
 :preserves        & T:EquivalenceRelation    &  Y*              \\ \hline
 \end{tabular}
-\caption{Generic Environment Ontology. The generic prefix T: specifies the member type. Specific environments include lang:Environment (a system of mappings between the abstract syntax of languages), qlang:Environment (a system of mappings between query languages)}
+\caption{Generic Environment Metamodel. The generic prefix T: specifies the member type. Specific environments include lang:Environment (a system of mappings between the abstract syntax of languages), qlang:Environment (a system of mappings between query languages)}
 \label{krenvonto}
 \end{table}
 
@@ -382,7 +371,7 @@ xsd:            & \url{http://XSD_Datatype_namespace }     \\ \hline
 :isBasic         & xsd:boolean     &  Y              \\ \hline
 :components      & T:MappingList     &  Y?              \\ \hline
 \end{tabular}
-\caption{Generic Mapping Ontology}
+\caption{Generic Mapping Metamodel}
 \label{krmaponto}
 \end{table}
 
@@ -432,7 +421,7 @@ Operations are defined in terms of their events. Proficiencies are used to bundl
 \textbf{Property} & \textbf{Range} & \textbf{ev:} & \textbf{op:}  & \textbf{pro:} & \textbf{role:} \\ \hline
 :hasIdentifier    & :Identifer     & Y?           & Y             & Y             & Y              \\ \hline
 \end{tabular}
-\caption{Knowledge Resource Operation, Event, Proficiency and Role Ontologies}
+\caption{Knowledge Resource Operation, Event, Proficiency and Role Metamodels}
 \label{kroponto}
 \end{table}
 
@@ -639,7 +628,7 @@ Monads supported are Maybe monad,  List monad, State monad, Fact monad. Addition
   \item output.
 \end{itemize}
     
-TODO examples how the Prova agents maps to API4KB ontology
+TODO examples how the Prova agents maps to API4KB metamodel
 
 
 \section{Related Work and Discussion}
