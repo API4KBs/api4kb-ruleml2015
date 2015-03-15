@@ -116,7 +116,7 @@ By early 2014, the DOL and API4KB submission teams began working together to pro
 \subsection{Monads}
 In seminal work that established a theoretical foundation for proving the equivalence of programs, Moggi\todo{cite  Moggi, Eugenio (1991). "Notions of computation and monads". Information and Computation 93 (1). doi:10.1016/0890-5401(91)90052-4.} applied the notion of monad from category theory\todo{cite MacLane} to computation.
 As defined in category theory, a monad  is an endofunctor on a category C (a kind of mapping from C into itself) which additionally satisfies some requirements (the monad laws).
-In functional programming, monads on a particular category are of interest - the category of types.
+In functional programming, monads on a particular category are of interest - the category with types as objects and programs as arrows.
 For example, the List[\_] typeclass is a monad, e.g. List[Int] is a type that is a member of List[\_].
 
 Each monad has the following transformations (exemplified for the List monad where lists are denoted with angle brackets)
@@ -169,7 +169,7 @@ In general monads can be nested through composition, although the combination is
 \label{sec:upper}
 The principle upper-level concepts in the API4KB ontology are
 \begin{description}
-\item[Communicating Entity] architectural elements that may communicate (initiate, forward or receive communications) with other elements.
+%\item[Communicating Entity] architectural elements that may communicate (initiate, forward or receive communications) with other elements.
 \item[Knowledge Source] source of machine-readable information with definite semantics. Examples: an RDF graph, a mutable RDF source, an RDF dataset with specified semantics, or a relational database with a mapping to an ontology.
 \item[Environment] mathematical structure of mappings and members, where the domain and codomains of the mappings are members of the environment.  Example: a KRR language environment containing semantics-preserving translations from RDF and OWL into Common Logic.
 \item[Knowledge Operation] function (possibly with side-effects) having a knowledge source, environment or operation type in its signature. Examples: creating, modifying, deleting, parsing, translating, querying, downloading, or reasoning about a knowledge source.
@@ -231,13 +231,13 @@ These definitions are intentionally vague so as to be adaptable to a variety of 
 
 \subsection{Knowledge Source Hierarchy}
 We have developed a hierarchy of \emph{knowledge source level} of abstraction that is a generalization of the FRBR \cite{FRBR} Work-Expression-Manifestation-Item (WEMI) hierarchy of abstraction tailored for machine-readable KRR languages. The fundamental building blocks of knowledge sources are \emph{basic knowledge resources}, which are immutable knowledge sources without structure.
-Subclasses of basic knowledge resource are defined according to their knowledge source level:
+Subclasses of basic knowledge resources are defined according to their knowledge source level, and API4KB operations (see \ref{sec:op}) provide transformations from one level to another.
 \begin{description}
-\item[Expression] A \emph{basic knowledge expression} is a well-formed formula in the abstract syntax of a KRR language.
-Example: KE1 - the instance of the OWL 2 DL abstract syntax for an ontology version from an ontology series, differing from other versions of the series only in the natural language definitions.
-\item[Manifestation] A \emph{basic knowledge manifestation} is a character-based embodiment of a knowledge expression in a concrete dialect. Example:KM1 - the OWL/RDF XML DOM instance of example KE1.
-\item[Item] A \emph{basic knowledge item} is a single exemplar of a knowledge manifestation in a particular location. Example: KI1 - a file on a network server embodying KM1.
-\item[Asset] A \emph{basic knowledge asset} is an equivalence class of basic expressions determined by the equivalence relation of an asset environment (see Section!\ref{krassetenv}. Examples: KA1 - an equivalence class of basic knowledge expressions in OWL2 DL, according to a semantics-preserving environment for the OWL2 DL language.
+\item[Basic Knowledge Expression:] well-formed formula in the abstract syntax of a KRR language.
+Example KE1: the instance of the OWL 2 DL abstract syntax for an ontology version from an ontology series KA1, differing from other versions of the series only in the natural language definitions.
+\item[Basic Knowledge Manifestation:] character-based embodiment of a knowledge expression in a concrete dialect. Example KM1: the OWL/RDF XML abstract DOM instance of example KE1.
+\item[Basic Knowledge Item:] single exemplar of a knowledge manifestation in a particular location. Example KI1: a file on a network server embodying example KM1.
+\item[Basic Knowledge Asset:] equivalence class of basic expressions determined by the equivalence relation of an asset environment (see Section~\ref{krassetenv}.) Example KA1: an OWL2 DL ontology series, viewed as an equivalence class of basic knowledge expressions in OWL2 DL, including example KE1, according to a semantics-preserving environment for the OWL2 DL language where the mapping to the focus language strips the natural language definitions from the axioms.
 \end{description}
 
 
@@ -315,7 +315,7 @@ I[+?*]       & indirect      \\ \hline
 \begin{tabular}{|l|l|}
 \hline
 \textbf{Abbreviation} & \textbf{Expansion} \\ \hline
-:            & \url{http:// API4KB namespace}      \\ \hline
+:            & \url{http://API4KB_namespace}      \\ \hline
 ks:            & :KnowledgeSource/      \\ \hline
 kr:            & :KnowledgeResource/      \\ \hline
 ka:            & kr:Asset/      \\ \hline
@@ -324,12 +324,14 @@ km:            & kr:Manifestation/      \\ \hline
 ki:            & kr:Item/      \\ \hline
 lang:            & :Language/      \\ \hline
 map:            & :Mapping/      \\ \hline
-xsd:            & \url{http:// XSD Datatype namespace}      \\ \hline
+xsd:            & \url{http://XSD_Datatype_namespace }     \\ \hline
 \end{tabular}
 \caption{Prefix Mappings}
 \label{abbreviations}
 \end{minipage}
 \end{table}
+ \todo{API4KB namespace}
+ \todo{XSD Datatype namespace} 
 
 \begin{table}[h]
 \begin{tabular}{|l|l|l|l|l|l|l|l|}
@@ -420,7 +422,7 @@ xsd:            & \url{http:// XSD Datatype namespace}      \\ \hline
 
 
 \subsection{Operations, Events, Proficiencies and Roles}
-\label{op}
+\label{sec:op}
 
 In the API4KB framework, the building blocks for all knowledge operations are \emph{actions} -- unary knowledge operations, possibly with side-effects and possibly of higher-order. To maintain a separation of concerns, side-effectful actions are assumed to be void, with no return value. Knowledge operations are either actions or are built up from the composition of actions. 
 
@@ -487,14 +489,16 @@ Operations are defined in terms of their events. Proficiencies are used to bundl
 \label{sec:structure}
 We generalize the OntoIOp/DOL (cite DOL) concept for structured OMS (ontologies, models and specifications) to define a concept of structured knowledge resource for each level of abstraction. A \emph{structured knowledge resource} is a collection whose components are knowledge resources of the same level of abstraction.
 \begin{description}
-\item[Expression] A \emph{structured knowledge expression} is a collection of knowledge expressions, which are not necessarily in the same language and may themselves have structure. Example: KE2 - a heterogeneous set of RDF graphs, OWL and Common Logic expressions, KE3 - the OWL 2 DL ontology series, containing KE1.
-\item[Manifestation] A \emph{structured knowledge manifestation} is a collection of knowledge manifestations, which are not necessarily in the same language or dialect and may themselves have structure. Example: KM2 -  a heterogeneous structure of an RDF Turtle and OWL Manchester as strings and, OWL/RDF, RuleML and Common Logic XCL2 as XML DOM documents.
-\item[Item] A \emph{structured knowledge item} is a collection of knowledge items, which are not necessarily in the same language, dialect, format or location, and may themselves have structure. Example: KI2 -  a heterogeneous structure of an RDF triple store, an RDF/XML sensor feed, a MySQL database accessed through an ontology-based data access (OBDA) source schema providing a mapping to OWL, RuleML XML files on a local hard drive and Common Logic XCL2 files on a network server in a content management system.
-\item[Asset] A \emph{structured knowledge asset} is a collection of knowledge assets, which are not necessarily according to the same environment, but where there is a unique language that is the focus of the environment of each component. Example: KA2 - a heterogeneous structure of assets conceptualized from RDF, OWL and Common Logic expressions, according to environments that provides translations from RDF or OWL into Common Logic.
+\item[Structured Knowledge Expression:] collection of knowledge expressions (either structured or basic), which are not necessarily in the same language and may themselves have structure. ExampleKE2: a heterogeneous set of RDF graphs, OWL, Common Logic expressions and data in a relational model. Example KE3: the OWL 2 DL ontology series KA1, viewed as a collection of expressions rather than an equivalence class.
+\item[Structured Knowledge Manifestation:] collection of knowledge manifestations (either structured or basic), which are not necessarily in the same language or dialect and may themselves have structure. Example KM2: a heterogeneous structure of RDF Turtle, OWL Manchester and SQL as sequences of string tokens, and OWL/XML, RuleML and Common Logic XCL2 as XML abstract DOM documents embodying example KE2.
+\item[Structured Knowledge Item:] collection of knowledge items  (either structured or basic), which are not necessarily in the same language, dialect, format or location, and may themselves have structure. Example KI2:  a heterogeneous structure of an RDF triple store, an RDF/XML sensor feed, a MySQL database , RuleML XML files on a local hard drive and Common Logic XCL2 files on a network server in a content management system, exemplifying example KM2.
+\item[Structured Knowledge Asset:] collection of knowledge assets  (either structured or basic), which are not necessarily according to the same environment, but where there is a unique language that is the focus of the environment of each component. Example KA2: a heterogeneous structure of assets conceptualized from the RDF, OWL and Common Logic expressions of example KE2 according to an environment that provides translations from RDF or OWL into Common Logic, and an ontology-based data access (OBDA) source schema providing a mapping from the relational model to OWL.
 \end{description}
 
 
-To assist in defining operations on structured knowledge sources while still maintaining generality, the collection structure of a structured knowledge resource is simply required to arise from a monad functor on the knowledge resource types. Collection structures that satisfy these requirement include sets, bags and sequences, but other structures also meet these requirements, including
+To assist in defining operations on structured knowledge sources while still maintaining generality, the collection structure of a structured knowledge resource is simply required to arise from a monad functor on the knowledge resource types. Collection structures that satisfy these requirement include sets, bags and sequences, but other structures also meet these requirements.
+
+Monads of relevance to API4KB include
 \begin{description}
 \item [Option] handles nullability, has subclasses Some, which wraps a knowledge resource, and None, which is empty
 \item [Try] handles exceptions, has subclasses Success, which wraps a knowledge resource, and Failure, which wraps a (non-fatal) exception
@@ -560,7 +564,13 @@ Notice that the expressions of type B are not required to be in a knowledge repr
 Structured expressions can always be constructed in a monad that has more structure than necessary for compatibility with the semantics of a given language.
 For example, List and Stream monads can be used for monotonic, effect-free languages even though the Set monad has sufficient structure for these languages;
 a forgetful functor is used to define the semantics in the monad with greater structure in terms of the monad of lesser structure.
-A heterogeneous structure of languages containing some languages with effects and others without effects (e.g. an ECA rulebase supported by ontologies) would thus could make primary use of a monad that preserves order, such as List or Stream, while permitting some members of the collection to have a SetTree structure. In particular, if A is an ECA rulebase language and B is an ontology language, then ListTree[ A or SetTree[B]] would be an appropriate monadic tree structure for heterogeneous knowledge expressions in these two languages.
+A heterogeneous structure of languages containing some languages with effects and others without effects (e.g. an ECA rulebase supported by ontologies) would thus could make primary use of a monad that preserves order, such as List or Stream, while permitting some members of the collection to have a SetTree structure. In particular, if A is an ECA rulebase language and B is an ontology language, then ListTree[ A or SetTree[B]] would be an appropriate monadic tree structure for heterogeneous knowledge expressions in these two languages. 
+%In general, monads combined using disjunction can be used as a basis for tree structures as follows: 
+% M[E] = Either[M1[E], M2[E]] is a monad provided:
+%    unit_M(x) = Right( unit_M2(x))
+%    map_M(x)  = map_M1(x) if x is Left, map_M2(x) if x is Right
+%    join_M(x) = join_M2(x) if x is Right[Right],
+%                otherwise, the value is obtained by lifting x into Right[Right] by applying a full functor G that is a right adjoint of the forgetful functor F from M2 to M1
 
 
 
