@@ -12,9 +12,9 @@
 \usepackage{rotating}
 \usepackage[draft]{todonotes}
 %
-\title{API4KB Ontologies: a Meta-API for Heterogeneous Knowledge Platforms}
+\title{API4KP Ontologies: a Meta-API for Heterogeneous Knowledge Platforms}
 
-\titlerunning{API4KB Ontologies}
+\titlerunning{API4KP Ontologies}
 
 \date{}
 %
@@ -39,7 +39,7 @@ Department of Biomedical Informatics, Arizona State University, USA\\
 \maketitle
 
 \begin{abstract}
-API4KB ontologies target the basic administration
+API4KP ontologies target the basic administration
 services as well as the retrieval and the modification of expressions in machine-readable knowledge representation and reasoning (KRR) languages within heterogeneous (multi-language, multi-nature) knowledge platforms.
 KRR languages of concern include but are not limited to RDF(S), OWL, RuleML and Common Logic, and the knowledge platforms may support one or several of these.
 The ontologies provide a metamodel, or abstract syntax, for the communications between architectural elements, including a classification of knowledge source by mutability, structure, and an abstraction hierarchy as well as the use of performatives (assert, query, ...), languages, logics, dialects and formats. Finally, a framework is provided for defining operations on knowledge sources and platforms.
@@ -76,7 +76,7 @@ Communication channels may in general be many-to-many and uni- or -bidirectional
 Various types of communication paradigms are supported from strongly-coupled communication via low-level inter-process communication with ad-hoc network programming, loosely coupled remote invocation in a two-way exchange via interfaces  (RPC/RMI/Component/Agent) between communicating entities, to decoupled indirect communication, where sender and receiver are time and space uncoupled via an intermediary such as a publish-subscribe and event processing middleware.
 The communication entities fulfill different roles and responsibilities (client, server, peer, agent) in typical architectural styles such as client-server, peer-to-peer or multi-agent systems. Their placement (mapping) on the physical distributed infrastructure allows many variations (partitioning, replication, caching and proxing, mobile) such as deployment on multiple servers and caches to increase performance and resilience, use of low cost computer resources with limited hardware resources or adding/removing mobile computers/devices.
 
-Given this variety of architectural requirements, an abstraction is required to facilitate the interchange, deployment, revision and ultimately consumption of formal, declarative pieces of knowledge within a knowledge-driven application. We assembled a multi-disciplinary working group with the goal of creating a standard API for the interaction with the Knowledge Platform at the core of a KDA called API4KB. %just realized we should have migrated to API4KP...
+Given this variety of architectural requirements, an abstraction is required to facilitate the interchange, deployment, revision and ultimately consumption of formal, declarative pieces of knowledge within a knowledge-driven application. We assembled a multi-disciplinary working group with the goal of creating a standard API for the interaction with the Knowledge Platform at the core of a KDA called API4KP. %just realized we should have migrated to API4KP...
 % describe the problem and the problem solution + contribution
 To provide a semantic foundation for the operations and their arguments, we have created a metamodel of knowledge sources and expressed it as an OWL ontology.
 After providing some background notions in Section \ref{sec:bg}, we will describe the primary concepts in the metamodel in Section \ref{sec:metamodel}. In particular, a complete definition of the notion of (structured) knowledge resource will be provided in Section \ref{sec:structure}. 
@@ -109,7 +109,7 @@ Language) language. The OntoIOp RFP asked for:
 \item A description of constraints and conformance criteria for additional concrete languages and translations between concrete languages that are not explicitly supported, but nonetheless have equivalent uses that could be recognized and correctly processed by implementations.
 \end{itemize}
 
-By early 2014, the DOL and API4KB submission teams began working together to provide a language and set of related interfaces to solve the problems identified by both groups independently. An initial submission for DOL \cite{DOL} was presented to the OMG in November 2014, and is currently under revision, with a planned submission for adoption in June 2014.  The API4KBs initial submission, which leverages the DOL effort, will be submitted initially in September 2015, with a planned revision for adoption in early 2016.  The work described in this paper summarizes some of the findings of the API4KBs team.
+By early 2014, the DOL and API4KP submission teams began working together to provide a language and set of related interfaces to solve the problems identified by both groups independently. An initial submission for DOL \cite{DOL} was presented to the OMG in November 2014, and is currently under revision, with a planned submission for adoption in June 2014.  The API4KPs initial submission, which leverages the DOL effort, will be submitted initially in September 2015, with a planned revision for adoption in early 2016.  The work described in this paper summarizes some of the findings of the API4KPs team.
 
 %Example 4 Query results may reflect the structure of the structured knowledge asset to which they are applied. For example, a query applied to a Try of a derived knowledge asset may return a Failure if an exception arises in the derivation of the knowledge asset.
 
@@ -117,18 +117,18 @@ By early 2014, the DOL and API4KB submission teams began working together to pro
 % ****************
 
 
-\section{API4KB Metamodel}
+\section{API4KP Metamodel}
 \label{sec:metamodel}
 \todo{transition needed}
 \subsection{Upper Levels of the Metamodel}
 \label{sec:upper}
-The principle upper-level concepts in the API4KB metamodel are
+The principle upper-level concepts in the API4KP metamodel are
 \begin{description}
 %\item[Communicating Entity] architectural elements that may communicate (initiate, forward or receive communications) with other elements.
-\item[Knowledge Source] source of machine-readable information with definite semantics. Examples: an RDF graph, a mutable RDF source, an RDF dataset with specified semantics, or a relational database with a mapping to an ontology.
-\item[Environment] mathematical structure of mappings and members, where the domain and codomains of the mappings are members of the environment.  Example: a KRR language environment containing semantics-preserving translations from RDF and OWL into Common Logic.
-\item[Knowledge Operation] function (possibly with side-effects) having a knowledge source, environment or operation type in its signature. Examples: creating, modifying, deleting, parsing, translating, querying, downloading, or reasoning about a knowledge source.
-\item[Knowledge Event] successful execution of a knowledge operation.
+\item[Knowledge Source:] source of machine-readable information with semantics. Examples: an RDF graph, a mutable RDF source, an RDF dataset with specified semantics, or a relational database with a mapping to an ontology.
+\item[Environment:] mathematical structure of mappings and members, where the domain and codomains of the mappings are members of the environment.  Example: a KRR language environment containing semantics-preserving translations from RDF and OWL into Common Logic.
+\item[Knowledge Operation:] function (possibly with side-effects) having a knowledge source, environment or operation type in its signature. Examples: creating, modifying, deleting, parsing, translating, querying, downloading, or reasoning about a knowledge source.
+\item[Knowledge Event:] successful execution of a knowledge operation.
 \end{description}
 These definitions are intentionally vague so as to be adaptable to a variety of implementation paradigms.
 
@@ -137,31 +137,31 @@ These definitions are intentionally vague so as to be adaptable to a variety of 
 %Communication channels may in general be many-to-many and uni- or -bidirectional, but a particular communication will have a unique sender. (cite low-level 0MQ and high-level RuleResponder SEDA Architecture http://responder.ruleml.org supporting e.g. JMS, ActiveMQ, and RabbitMQ)
 %Each communication has a unique source; multi-source communications are not modelled directly, but are emulated by knowledge sources that are accessed as streams. We will allow for failure, either in communication or in execution, but do not specify any particular failure recovery strategy. Communicating entities may be single-sorted or many-sorted, with sorts being characterized by the kind of communications that may be initiated, forwarded or received, and by the kind of entity they may be received or forwarded from or sent to.
 %
-%The API4KB architectural elements are categorized according to the following competency questions in the ontology.
+%The API4KP architectural elements are categorized according to the following competency questions in the ontology.
 %
 %\begin{enumerate}
-%\item What are the entities that are communicating in the %distributed API4KB system?
-%\item How do they communicate, or, more specifically, what communication paradigm is used between API4KB entities?
-%\item What (potentially changing) roles and responsibilities do they have in the overall API4KB architecture?
-%\item What is the mapping of the API4KB elements into a physical distributed infrastructure?
+%\item What are the entities that are communicating in the %distributed API4KP system?
+%\item How do they communicate, or, more specifically, what communication paradigm is used between API4KP entities?
+%\item What (potentially changing) roles and responsibilities do they have in the overall API4KP architecture?
+%\item What is the mapping of the API4KP elements into a physical distributed infrastructure?
 %\end{enumerate}
 %
 %\textbf{Communicating Entities}
 %
 %\begin{description}
-%    \item [Node]: In primitive environments such as sensor networks, operating systems does not provide any abstractions, therefore (hardware) nodes communicate.
-%    \item [Process]: In most environments processes are supplemented by threads, so threads are more the endpoints of communications.
-%    \item [Object]: Computation is encapsulated by a number of interacting distributed objects representing units of decomposition for the problem domain. Objects are accessed via interfaces.
-%    \item [Component]: Resemble objects in that they offer problem-oriented abstractions, also accessed via interfaces. They specify not only their interfaces but also the assumptions they make in terms of other components/interfaces that must be present for a component to fulfill its function.
-%    \item [Service] and [Agent]: Software application which is identified via URI and can interact with other software agents (typically using a higher-level coordination and negotiation protocol).
+%    \item [Node:] In primitive environments such as sensor networks, operating systems does not provide any abstractions, therefore (hardware) nodes communicate.
+%    \item [Process:] In most environments processes are supplemented by threads, so threads are more the endpoints of communications.
+%    \item [Object:] Computation is encapsulated by a number of interacting distributed objects representing units of decomposition for the problem domain. Objects are accessed via interfaces.
+%    \item [Component:] Resemble objects in that they offer problem-oriented abstractions, also accessed via interfaces. They specify not only their interfaces but also the assumptions they make in terms of other components/interfaces that must be present for a component to fulfill its function.
+%    \item [Service] and [Agent:] Software application which is identified via URI and can interact with other software agents (typically using a higher-level coordination and negotiation protocol).
 %\end{description}
 %
 %\textbf{Communication Paradigms}
 %
 %\begin{description}
-%    \item [Strongly Coupled Communication]: Low-level, direct API access requiring direct knowledge of the (downloaded) API4KB [Artifacts] or inter-process communication in distributed systems with ad-hoc network programming including message parsing-primitives.
-%    \item [Loosely Coupled Communication]: Loosely coupled remote invocation in a two-way exchange via an [Interface] (RPC/RMI/Component/Agent) between communicating entities.
-%    \item [Decoupled Communication]: Indirect communication, where sender and receiver are time and space uncoupled via an [Intermediary].
+%    \item [Strongly Coupled Communication:] Low-level, direct API access requiring direct knowledge of the (downloaded) API4KP [Artifacts] or inter-process communication in distributed systems with ad-hoc network programming including message parsing-primitives.
+%    \item [Loosely Coupled Communication:] Loosely coupled remote invocation in a two-way exchange via an [Interface] (RPC/RMI/Component/Agent) between communicating entities.
+%    \item [Decoupled Communication:] Indirect communication, where sender and receiver are time and space uncoupled via an [Intermediary].
 %\end{description}
 %
 %\textbf{Roles}
@@ -169,41 +169,41 @@ These definitions are intentionally vague so as to be adaptable to a variety of 
 %For instance, client-server, peer-to-peer, agent architecture styles.
 %
 %\begin{description}
-%    \item [Client]: Client knows server (after discovery) and requests a particular knowledge resource service
-%    \item [Server]: Server is the central entity and provider of services and knowledge resources
-%    \item [Peer]: Peer is client/requester and provider ([Servant]) at the same time. Knowledge resources are shared between peers and can be accessed from other peers.
-%    \item [Agent]: an abstraction from the client-server or peer-to-peer architecture style into [orchestrated] or [choreography style] agent architectures.
+%    \item [Client:] Client knows server (after discovery) and requests a particular knowledge resource service
+%    \item [Server:] Server is the central entity and provider of services and knowledge resources
+%    \item [Peer:] Peer is client/requester and provider ([Servant]) at the same time. Knowledge resources are shared between peers and can be accessed from other peers.
+%    \item [Agent:] an abstraction from the client-server or peer-to-peer architecture style into [orchestrated] or [choreography style] agent architectures.
 %\end{description}
 %
 %\textbf{Placement}
 %
 %\begin{description}
-%    \item [Partitioning]: API4KB services provided by multiple servers by partitioning a set of objects in which the service is based and distribute them between multiple-services.
-%    \item [Replication]: Server maintain replicated API4KB server copies of them on several hosts (horizontal replication) or distributed API4KB functions into distributed peers.
-%    \item [Caching] and [Proxying]: A [Cache] stores recently used knowledge resources. Caches might be co-located with each client or located in a Proxy. [Proxy] provides a surrogate or placeholder for a API4KB knowledge object to control access to it.
-%    \item [Mobile]: Mobile (executable) code that is downloaded to a client or mobile components/agents, which are running programs (both code and data/resources + state) that travel from one computer / environment to another.
+%    \item [Partitioning:] API4KP services provided by multiple servers by partitioning a set of objects in which the service is based and distribute them between multiple-services.
+%    \item [Replication:] Server maintain replicated API4KP server copies of them on several hosts (horizontal replication) or distributed API4KP functions into distributed peers.
+%    \item [Caching] and [Proxying:] A [Cache] stores recently used knowledge resources. Caches might be co-located with each client or located in a Proxy. [Proxy] provides a surrogate or placeholder for a API4KP knowledge object to control access to it.
+%    \item [Mobile:] Mobile (executable) code that is downloaded to a client or mobile components/agents, which are running programs (both code and data/resources + state) that travel from one computer / environment to another.
 %\end{description}
 
 \subsection{Knowledge Source Hierarchy}
 We have developed a hierarchy of \emph{knowledge source level} of abstraction that is a generalization of the FRBR \cite{FRBR} Work-Expression-Manifestation-Item (WEMI) hierarchy of abstraction tailored for machine-readable KRR languages. The fundamental building blocks of knowledge sources are \emph{basic knowledge resources}, which are immutable knowledge sources without structure.
-Subclasses of basic knowledge resources are defined according to their knowledge source level, and API4KB operations (see \ref{sec:op}) provide transformations from one level to another.
+Subclasses of basic knowledge resources are defined according to their knowledge source level, and API4KP operations (see \ref{sec:op}) provide transformations from one level to another.
 \begin{description}
-\item[Basic Knowledge Expression:] well-formed formula in the abstract syntax of a KRR language.
+\item[Basic Knowledge Expression:] well-formed formula in the abstract syntax of a machine-readable language.\footnote{The use of "basic" in API4KP differs from its usage in DOL\cite{DOL} - a DOL basic OMS is a set, and this corresponds to a Set-structured knowledge asset in API4KP.}
 Example KE1: the instance of the OWL 2 DL abstract syntax for an ontology version from an ontology series KA1, differing from other versions of the series only in the natural language definitions.
-\item[Basic Knowledge Manifestation:] character-based embodiment of a knowledge expression in a concrete dialect. Example KM1: the OWL/RDF XML abstract DOM instance of example KE1.
-\item[Basic Knowledge Item:] single exemplar of a knowledge manifestation in a particular location. Example KI1: a file on a network server embodying example KM1.
+\item[Basic Knowledge Manifestation:] character-based embodiment of a basic knowledge expression in a concrete dialect. Example KM1: the OWL/RDF XML abstract DOM instance of example KE1.
+\item[Basic Knowledge Item:] single exemplar of a basic knowledge manifestation in a particular location. Example KI1: a file on a network server embodying example KM1.
 \item[Basic Knowledge Asset:] equivalence class of basic expressions determined by the equivalence relation of an asset environment (see Section~\ref{krassetenv}.) Example KA1: an OWL2 DL ontology series, viewed as an equivalence class of basic knowledge expressions in OWL2 DL, including example KE1, according to a semantics-preserving environment for the OWL2 DL language where the mapping to the focus language strips the natural language definitions from the axioms.
 \end{description}
 
 
 \begin{description}
-\item[exemplify] to instantiate (a knowledge manifestation) in a particular format and at a particular location (address in some virtual address space)
+\item[exemplify:] to instantiate (a knowledge manifestation) in a particular format and at a particular location (address in some virtual address space)
 
 Inverse: \emph{prototype}
-\item[embody] to represent (a knowledge expression) in a concrete syntax (dialect) of some particular KRR language
+\item[embody:] to represent (a knowledge expression) in a concrete syntax (dialect) of some particular KRR language
 
 Inverse: \emph{parse}
-\item[express] to represent (a knowledge asset) in the abstract syntax of some particular KRR language
+\item[express:] to represent (a knowledge asset) in the abstract syntax of some particular KRR language
 
 Inverse: \emph{conceptualize}
 \end{description}
@@ -219,23 +219,27 @@ There are various ways to manage explicit state, e.g. embedded inside the proces
 
 %A composable environment contains the mappings that are the composition of all compatible pairs of its mappings. An associative environment satisfies an associative property on composition of its mappings. A categorical environment is an associative environment that includes an identity mapping for every member.
 \subsection{Environments}
-In DOL  \todo{cite DOL}, a concept of language environment is developed \todo{quote definition of environment from DOL}
-In API4KB, we generalize the concept of environment as follows.
+In DOL \todo{cite DOL Draft}, a concept of heterogeneous logical environment is defined as 
+"environment for the
+expression of homogeneous and heterogeneous OMS, comprising
+a logic graph, an OMS language graph and a supports relation".
+In API4KP, we generalize the concept of environment as follows.
 \label{krassetenv}
 \begin{description}
-\item[Composable Environment] environment that contains the mappings that are the composition of all compatible pairs of its mappings
-\item[Associative Environment] composable environment that satisfies an associative property on composition of its mappings
-\item[Categorical Environment] associative environment that includes an identity mapping for every member
-\item[Language Environment] environment whose members are languages
-\item[Focused Environment] nonempty environment which has a member F (called the focus or focus member) such that for every other member A, there is a mapping in the environment from A to F
-\item[Preserving Environment] environment where every mapping preserves a specified property
-\item[Asset Environment] focused, categorical semantics-preserving language environment where the focus is a KRR language
+\item[Composable Environment:] environment that contains the mappings that are the composition of all compatible pairs of its mappings
+\item[Associative Environment:] composable environment that satisfies an associative property on composition of its mappings
+\item[Categorical Environment:] associative environment that includes an identity mapping for every member
+\item[Language Environment:] environment whose members are languages
+\item[Focused Environment:] nonempty environment which has a member F (called the focus or focus member) such that for every other member A, there is a mapping in the environment from A to F
+\item[Preserving Environment:] environment where every mapping preserves a specified property
+\item[Asset Environment:] focused, categorical semantics-preserving language environment where the focus is a KRR language
 \end{description}
+The special case where all languages in an asset environment are KRR languages supporting by model-theoretic, monotonic semantics without side-effects reduces to a heterogeneous logical environment as defined in DOL - this is the appropriate definition of "semantics-preserving" for this case. In the general case, the definition of "semantics-preserving" must be defined as needed.
 
 \subsection{Performatives}
 The Knowledge Query and Manipulation Language (KQML) \todo{cite KQML} introduced the concept of "performatives, which was later extended by FIPA-ACL\todo{cite FIPA-ACL}.
 
-The KRR Languages covered by API4KB include ontology languages (e.g. OWL), query languages (e.g. SPARQL), languages that describe the results of queries, events and actions, and declarative executable languages (e.g. Prolog, ECA RuleML, DOL). In the latter cases, the languages typically includes syntactic constructs for performatives, e.g. \emph{assert}, \emph{query}, and the description of a knowledge resource may include a list of the performatives that are used within it.  Performatives will be modelled as \emph{operations} as defined in Section~\ref{op}.
+The KRR Languages covered by API4KP include ontology languages (e.g. OWL), query languages (e.g. SPARQL), languages that describe the results of queries, events and actions, and declarative executable languages (e.g. Prolog, ECA RuleML). In the latter cases, the languages typically includes syntactic constructs for performatives, e.g. \emph{inform}, \emph{query}, and the description of a knowledge resource may include a list of the performatives that are used within it.  Performatives will be modelled as \emph{operations} as defined in Section~\ref{op}.
 
 % Assert- 
 
@@ -243,9 +247,9 @@ The KRR Languages covered by API4KB include ontology languages (e.g. OWL), query
 
 
 \subsection{Descriptions}
-As stated above, we do not make assumptions regarding the drivers for communications, e.g. an implementation may be message-driven, event-driven, or a combination of both. However, our metamodel takes a message-centric perspective, with the message body being a description of a knowledge source or a knowledge operation.
+As stated above, we do not make assumptions regarding the drivers for communications, e.g. an implementation may be message-driven, event-driven, or a combination of both. However, our metamodel takes a message-centric perspective, with the message body typically being a description of a knowledge source or a knowledge operation.
 
-A \emph{knowledge source description} is a knowledge resource whose subject matter is another knowledge source, which may be expressed, e.g., as an OWL ontology of individuals or an RDF graph. The properties and classes in the API4KB namespace that may be employed in knowledge source descriptions are listed in the following tables and formalized in the API4KB OWL ontologies. Further, IRIs in other namespaces may be used to express metadata within a knowledge source description. A description about the description itself may be referenced through an IRI, or included within the description explicitly through the :hasDescription property,  OWL annotations, or as an RDF dataset. (cite)
+A \emph{knowledge source description} is a knowledge resource whose subject matter is another knowledge source, which may be expressed, e.g., as an OWL ontology of individuals or an RDF graph. The properties and classes in the API4KP namespace that may be employed in knowledge source descriptions are listed in the following tables and formalized in the API4KP OWL ontologies. Further, IRIs in other namespaces may be used to express metadata within a knowledge source description. A description about the description itself may be referenced through an IRI, or included within the description explicitly through the :hasDescription property,  OWL annotations, or as an RDF dataset. \todo{cite RDF dataset specification}
 
 %some tables
 \begin{table}[h]
@@ -270,7 +274,7 @@ I[+?*]       & indirect      \\ \hline
 \begin{tabular}{|l|l|}
 \hline
 \textbf{Abbreviation} & \textbf{Expansion} \\ \hline
-:            & \url{http://API4KB_namespace}      \\ \hline
+:            & \url{http://API4KP_namespace}      \\ \hline
 ks:            & :KnowledgeSource/      \\ \hline
 kr:            & :KnowledgeResource/      \\ \hline
 ka:            & kr:Asset/      \\ \hline
@@ -285,7 +289,7 @@ xsd:            & \url{http://XSD_Datatype_namespace }     \\ \hline
 \label{abbreviations}
 \end{minipage}
 \end{table}
- \todo{API4KB namespace}
+ \todo{API4KP namespace}
  \todo{XSD Datatype namespace} 
 
 \begin{table}[h]
@@ -379,36 +383,36 @@ xsd:            & \url{http://XSD_Datatype_namespace }     \\ \hline
 \subsection{Operations, Events, Proficiencies and Roles}
 \label{sec:op}
 
-In the API4KB framework, the building blocks for all knowledge operations are \emph{actions} -- unary knowledge operations, possibly with side-effects and possibly of higher-order. To maintain a separation of concerns, side-effectful actions are assumed to be void, with no return value. Knowledge operations are either actions or are built up from the composition of actions. 
+In the API4KP framework, the building blocks for all knowledge operations are \emph{actions} -- unary knowledge operations, possibly with side-effects and possibly of higher-order. To maintain a separation of concerns, side-effectful actions are assumed to be void, with no significant return value. Knowledge operations are either actions or are built up from the composition of actions. 
 
-Utility actions for lifting and lowering the knowledge source level are provided. Other kinds of side-effect-free actions are horizontal, with input and output at the same knowledge source level, or higher-order, where input or output are actions.
+Utility actions for lifting and lowering the knowledge source level are provided. Other kinds of side-effect-free actions are horizontal, with input and output at the same knowledge source level (e.g. for constructing structured knowledge sources), or higher-order, where input or output are actions (e.g. for querying).
 
 \begin{description}
-    \item[Side-effectful Operation] knowledge operation with effects beyond the output value returned
-    \item[Side-effect-free Operation] knowledge operation with no effects beyond the output value returned
-    \item[Action] unary atomic knowledge operation, possibly with side-effects
+    \item[Side-effectful Operation:] knowledge operation with effects beyond the output value returned
+    \item[Side-effect-free Operation:] knowledge operation with no effects beyond the output value returned
+    \item[Action:] unary atomic knowledge operation, possibly with side-effects
     \begin{description}
-      \item[Lifting Action] side-effect-free action whose output is at a higher knowledge source level than the input
-      \item[Lowering Action]  side-effect-free action whose output is at a lower knowledge source level than the input
-      \item[Horizontal Action] side-effect-free action whose output is at the same knowledge source level as the input
-      \item[Idempotent Action] side-effect free action that is equal to its composition with itself (A = A o A)
-      \item[Higher-Order Action] side-effect-free action whose input or output (or both) is an action
+      \item[Lifting Action:] side-effect-free action whose output is at a higher knowledge source level than the input
+      \item[Lowering Action:]  side-effect-free action whose output is at a lower knowledge source level than the input
+      \item[Horizontal Action:] side-effect-free action whose output is at the same knowledge source level as the input
+      \item[Idempotent Action:] side-effect free action that is equal to its composition with itself (A = A o A)
+      \item[Higher-Order Action:] side-effect-free action whose input or output (or both) is an action
     \end{description}
 \end{description}
 
 In this framework, we define two void actions that have side-effects on the state of mutable knowledge resources:
   \begin{description}
-    \item[Put] void action whose input is a mutable knowledge source and has the side-effect of setting the mutable knowledge source to a particular, fully-specified state
-    \item[Update] void action whose input is a mutable knowledge source and has the side-effect of setting the mutable knowledge to a new state that is the result of applying a side-effect-free action to the current state
+    \item[Put:] void action whose input is a mutable knowledge source and has the side-effect of setting the mutable knowledge source to a particular, fully-specified state
+    \item[Update:] void action whose input is a mutable knowledge source and has the side-effect of setting the mutable knowledge to a new state that is the result of applying a side-effect-free action to the current state
   \end{description}
   
   A side-effectful operation can be considered idempotent if its successful execution multiple times (synchronously) leads to no additional detectable side-effects beyond that of the first execution. Note that this is a different, but related, concept of idempotence than that for side-effect-free actions. An Update action based on an idempotent side-effect-free action is idempotent in this sense. A Put action is always idempotent.
 
 Additional concepts related to knowledge operations are events, proficiencies and roles:
 \begin{description}
-  \item[Event] successful evaluation or execution of a knowledge operation by a particular application at a particular time
-  \item[Proficiency] set of operations, which may be exposed by an application
-  \item[Role] set of proficiencies, which may be filled by an application
+  \item[Event:] successful evaluation or execution of a knowledge operation by a particular application at a particular time
+  \item[Proficiency:] set of operations, which may be exposed by an application
+  \item[Role:] set of proficiencies, which may be filled by an application
 \end{description}
 
 Operations are defined in terms of their events. Proficiencies are used to bundle small sets of related operations, while roles correspond to components of architectural patterns.
@@ -442,7 +446,8 @@ Operations are defined in terms of their events. Proficiencies are used to bundl
 
 \section{Structured Knowledge Resources}
 \label{sec:structure}
-We generalize the OntoIOp/DOL (cite DOL) concept for structured OMS (ontologies, models and specifications) to define a concept of structured knowledge resource for each level of abstraction. A \emph{structured knowledge resource} is a collection whose components are knowledge resources of the same level of abstraction.
+We generalize the DOL \todo{cite DOL draft} concept for structured OMS (ontologies, models and specifications) to define a concept of structured knowledge resource for each level of abstraction. In DOL, a structured OMS "results from other basic and structured OMS by import, union, combination, ... or other structuring operations".
+In API4KP, A \emph{structured knowledge resource} is a collection whose components are knowledge resources of the same level of abstraction, and knowledge operations will be provided to construct structured knowledge resources from other knowledge sources (see Sec/~\ref{sec:op}).
 \begin{description}
 \item[Structured Knowledge Expression:] collection of knowledge expressions (either structured or basic), which are not necessarily in the same language and may themselves have structure. ExampleKE2: a heterogeneous set of RDF graphs, OWL, Common Logic expressions and data in a relational model. Example KE3: the OWL 2 DL ontology series KA1, viewed as a collection of expressions rather than an equivalence class.
 \item[Structured Knowledge Manifestation:] collection of knowledge manifestations (either structured or basic), which are not necessarily in the same language or dialect and may themselves have structure. Example KM2: a heterogeneous structure of RDF Turtle, OWL Manchester and SQL as sequences of string tokens, and OWL/XML, RuleML and Common Logic XCL2 as XML abstract DOM documents embodying example KE2.
@@ -451,7 +456,7 @@ We generalize the OntoIOp/DOL (cite DOL) concept for structured OMS (ontologies,
 \end{description}
 
 
-To assist in defining operations on structured knowledge sources while still maintaining generality, the collection structure of a structured knowledge resource is simply required to arise from a monad functor on the knowledge resource types. Collection structures that satisfy these requirement include sets, bags and sequences, but other useful structures also meet these requirements.
+To assist in defining operations on structured knowledge sources while still maintaining generality, the collection structure of a structured knowledge resource is required to arise from a monad functor. Collection structures that satisfy these requirement include sets, bags and sequences, but other useful structures also meet these requirements.
 
 \subsection{Monads}
 In seminal work that established a theoretical foundation for proving the equivalence of programs, Moggi\todo{cite  Moggi, Eugenio (1991). "Notions of computation and monads". Information and Computation 93 (1). doi:10.1016/0890-5401(91)90052-4.} applied the notion of monad from category theory\todo{cite MacLane} to computation.
@@ -465,7 +470,7 @@ Each monad has the following transformations (exemplified for the List monad whe
 \item join: M[M[A]] $\Rightarrow$ M[A] collapses nested monad instances by one level (e.g. join($\langle$$\langle$1, 2$\rangle$, $\langle$3, 4$\rangle$$\rangle$) = $\langle$1, 2, 3, 4$\rangle$)
 \item map: (A $\Rightarrow$ B) $\Rightarrow$ (M[A] $\Rightarrow$ M[B]) takes a function between two generic types and returns a function relating the corresponding monadic types (e.g. map( s $\Rightarrow$ 2*s)($\langle$1, 2$\rangle$) = $\langle$2, 4$\rangle$)
 \end{itemize}
-Note that we choose the unit, join and map transformations as fundamental in this development of the monad laws because it is useful for later discussion on tree structures, whereas the usual theoretical treatment, based on unit and bind = join o map, is more concise.
+Note that we choose the unit, join and map transformations\cite{Wadler1992} as fundamental in this development of the monad laws because it is useful for later discussion on tree structures, whereas the usual theoretical treatment, based on unit and bind = join o map, is more concise.
 
 The map transformation defines a functor M, satisfying the functor laws:
 \begin{description}
@@ -487,17 +492,17 @@ Further, these transformations must obey the monad laws:
 \end{description}
 
 
-Monads of relevance to API4KB include
+Monads of relevance to API4KP include
 \begin{description}
-\item [Option] handles nullability, has subclasses Some, which wraps a knowledge resource, and None, which is empty
-\item [Try] handles exceptions, has subclasses Success, which wraps a knowledge resource, and Failure, which wraps a (non-fatal) exception
-\item [Future] handles concurrency, describes a process whose output may become available at some time
-\item [IO] handles IO side-effects, wraps a knowledge resource and an \emph{item configuration}
-\item [Task] handles general side-effects, wraps a knowledge resource and a description of a side-effectful task
-\item [Observable] handles streams, wraps a sequence of knowledge resources that become available over time
-\item [Key-Value Map] handles labelled structure, a knowledge resource is associated with each key in some set
-\item [Heterogeneous List] handles a specified pattern of knowledge resource subclasses (e.g. RuleML rulebase together with an owl ontology defining the sort hierarchy, CL text with sidecar RDF metadata).
-\item [State] handles state, wraps a knowledge resource (the state) and implements state transistions
+\item [Option:] handles nullability, has subclasses Some, which wraps a knowledge resource, and None, which is empty
+\item [Try:] handles exceptions, has subclasses Success, which wraps a knowledge resource, and Failure, which wraps a (non-fatal) exception
+\item [Future:] handles concurrency, describes a process whose output may become available at some time
+\item [IO:] handles IO side-effects, wraps a knowledge resource and an \emph{item configuration}
+\item [Task:] handles general side-effects, wraps a knowledge resource and a description of a side-effectful task
+\item [Observable:] handles streams, wraps a sequence of knowledge resources that become available over time
+\item [Key-Value Map:] handles labelled structure, a knowledge resource is associated with each key in some set
+\item [Heterogeneous List:] handles a specified pattern of knowledge resource subclasses (e.g. RuleML rulebase together with an OWL ontology defining the sort hierarchy, CL text with sidecar RDF metadata).
+\item [State:] handles state, wraps a knowledge resource (the state) and implements state transistions
 \end{description}
 These monad functors may be composed; for example, given a basic knowledge expression type E, the type (State o Try o List) [E] = State[Try[List[E]]] may be defined.
 %be of type State of type Try of type List of type basic knowledge expression.
@@ -507,7 +512,7 @@ In general, the composition of monads is not necessarily a monad.
 
 
 \subsection{Monadic Tree Structures}
-The monad structures needed for API4KB are a restricted form of the monads seen in functional programming - rather than applying to category of all types, these monads are functors on a smaller category of knowledge resource types. In DOL (\todo{DOL citation}), the concept of structured expression using sets is introduced. For example, let B be the category of (basic) Common Logic text expressions, and Q[B] = B or Set[Q[B]], where Set[Q[B]] is the typeclass of SetTree-structured Common Logic expressions. In particular, a member of type SetTree[B] is specified by a Set whose members are either  basic leaves (of type B) or structured branches (of type Set[Q[B]]). 
+The monad structures needed for API4KP are a restricted form of the monads seen in functional programming - rather than applying to category of all types, these monads are functors on a smaller category of knowledge resource types. In DOL (\todo{DOL citation}), the concept of structured expression using sets is introduced. For example, let B be the category of (basic) Common Logic text expressions, and Q[B] = B or Set[Q[B]], where Set[Q[B]] is the typeclass of SetTree-structured Common Logic expressions. In particular, a member of type SetTree[B] is specified by a Set whose members are either  basic leaves (of type B) or structured branches (of type Set[Q[B]]). 
 
 The Set monad is appropriate for defining structured expressions in monotonic logics, like Common Logic, because the order and multiplicity of expressions in a collection has no effect on semantics. The semantics of CL is provided by the CL interpretation structure that assigns a truth-value to each basic CL text expression. The truth-value of a set of CL text expressions is true in an interpretation I if each member of the set maps to true in I. The truth value I(y) of a SetTree-structured CL expression y is defined to be I(flatten(y)), where flatten(y) is the set of leaves of y.
 
@@ -551,7 +556,7 @@ Using the transformation T from the environment, we may define the interpretatio
 \item S(x) = T(x) if x $\in$ B, x otherwise
 \item I(x) = I( map(S)(flatten(x)) )
 \end{itemize}
-Notice that the expressions of type B are not required to be in a knowledge representation language. They could be in a domain-specific data model based on XML, JSON or SQL. The semantics of expressions of type B are derived from the transformation to type A, the focus  knowledge representation language of the environment. API4KB employs this feature to model ontology-based data access (OBDA) and rule-based data access (RBDA).
+Notice that the expressions of type B are not required to be in a knowledge representation language. They could be in a domain-specific data model based on XML, JSON or SQL. The semantics of expressions of type B are derived from the transformation to type A, the focus  knowledge representation language of the environment. API4KP employs this feature to model ontology-based data access (OBDA) and rule-based data access (RBDA).
 
 Structured expressions can always be constructed in a monad that has more structure than necessary for compatibility with the semantics of a given language.
 For example, List and Stream monads can be used for monotonic, effect-free languages even though the Set monad has sufficient structure for these languages;
@@ -562,7 +567,7 @@ A heterogeneous structure of languages containing some languages with effects an
 %    unit_M(x) = Right( unit_M2(x))
 %    map_M(x)  = map_M1(x) if x is Left, map_M2(x) if x is Right
 %    join_M(x) = join_M2(x) if x is Right[Right],
-%                otherwise, the value is obtained by lifting x into Right[Right] by applying a full functor G that is a right adjoint of the forgetful functor F from M2 to M1
+%                otherwise, the value is obtained by lifting x into Right[Right] by applying a full functor G:M1 => M2 that is a right adjoint of the forgetful functor F: M2 => M1
 
 
 
@@ -600,11 +605,11 @@ The smart home system may be modelled using a State monad, where changes to the 
 
   
 
-\subsection{Java Implementation of API4KB}
+\subsection{Java Implementation of API4KP}
 
 
 
-\subsection{Prova API4KB mapping}
+\subsection{Prova API4KP mapping}
 
 Prova functional programming supports:
 
@@ -628,7 +633,7 @@ Monads supported are Maybe monad,  List monad, State monad, Fact monad. Addition
   \item output.
 \end{itemize}
     
-TODO examples how the Prova agents maps to API4KB metamodel
+TODO examples how the Prova agents maps to API4KP metamodel
 
 
 \section{Related Work and Discussion}
@@ -647,11 +652,11 @@ RDF Specification - RDF source
 
 OBDA and RBDA
 
-The API4KB metamodel introduces the following generalizations of OntoIOp/DOL concepts:
+The API4KP metamodel introduces the following generalizations of OntoIOp/DOL concepts:
 \begin{itemize}
 \item Knowledge sources can have different levels of abstraction. DOL's OMS concept correspond to knowledge expressions, while we consider also the levels of asset, manifestation and item.
 \item Knowledge sources can be mutable or immutable. DOL's OMS correspond to immutable knowledge expressions.
-\item Each API4KB knowledge asset is conceptualized according to a customizable environment, instead of assuming a single logical environment in which all OMS are interpreted.
+\item Each API4KP knowledge asset is conceptualized according to a customizable environment, instead of assuming a single logical environment in which all OMS are interpreted.
 \item Environment members can be any language with an abstract syntax, instead of requiring each member to have a specific semantics. Only the focus of the environment is required to have its own semantics.
 \item Semantics is generalized to include side-effects as well as logical entailment.
 \item Structured knowledge resources may have structures other than nested sets.
@@ -668,7 +673,7 @@ The primary contributions of this paper are two-fold:
 \end{itemize}
 We have provided a proof-of-concept of this conceptual framework by application to the usecases, prototypical implementations and proof for the monadic tree structure.
 
-Future work on API4KB may include:
+Future work on API4KP may include:
 \begin{itemize}
 \item generalization of structured expressions to include structures based on applicative functors
 \item generalization of operations on structured knowledge resources in terms of catamorphisms and anamorphisms
