@@ -113,40 +113,6 @@ By early 2014, the DOL and API4KB submission teams began working together to pro
 
 
 
-\subsection{Monads}
-In seminal work that established a theoretical foundation for proving the equivalence of programs, Moggi\todo{cite  Moggi, Eugenio (1991). "Notions of computation and monads". Information and Computation 93 (1). doi:10.1016/0890-5401(91)90052-4.} applied the notion of monad from category theory\todo{cite MacLane} to computation.
-As defined in category theory, a monad  is an endofunctor on a category C (a kind of mapping from C into itself) which additionally satisfies some requirements (the monad laws).
-In functional programming, monads on a particular category are of interest - the category with types as objects and programs as arrows.
-For example, the List[\_] typeclass is a monad, e.g. List[Int] is a type that is a member of List[\_].
-
-Each monad has the following transformations (exemplified for the List monad where lists are denoted with angle brackets)
-\begin{itemize}
-\item unit: A $\Rightarrow$ M[A] lifts the input into the monad (e.g. unit(2) = $\langle$2$\rangle$)
-\item join: M[M[A]] $\Rightarrow$ M[A] collapses nested monad instances by one level (e.g. join($\langle$$\langle$1, 2$\rangle$, $\langle$3, 4$\rangle$$\rangle$) = $\langle$1, 2, 3, 4$\rangle$)
-\item map: (A $\Rightarrow$ B) $\Rightarrow$ (M[A] $\Rightarrow$ M[B]) takes a function between two generic types and returns a function relating the corresponding monadic types (e.g. map( s $\Rightarrow$ 2*s)($\langle$1, 2$\rangle$) = $\langle$2, 4$\rangle$)
-\end{itemize}
-Note that we choose the unit, join and map transformations as fundamental in this development of the monad laws because it is useful for later discussion on tree structures, whereas the usual theoretical treatment, based on unit and bind = join o map, is more concise.
-
-The map transformation defines a functor M, satisfying the functor laws:
-\begin{description}
-\item[Functor Identity] map(id)(y) = y
-\item[Functor Associativity] map(f o g) = map(f) o map(g)
-\end{description}
-where id is identity function s $\Rightarrow$ s.
-The unit and join transformations arise from natural transformations related to M, satisfying:
-\begin{description}
-\item[Unit from Natural Transformation] map(f)(unit(x)) = unit(f(x))
-\item[Join from Natural Transformation] join(map(join)(x)) = join(join(x))
-\end{description}
-
-Further, these transformations must obey the monad laws:
-\begin{description}
-\item[Monad Left Identity] join(map(unit)(x)) = x
-\item[Monad Right Identity] join(unit(x)) = x
-\item[Monad Associativity] join(map(map(f))(x)) = map(f)(join(x))
-\end{description}
-
-In general monads can be nested through composition, although the combination is not necessarily a monad. For example, (Set o List)[\_] is a typeclass, with members of type Set[List[A]], i.e. sets of lists of type A.
 
 % This material is out of place
 % ****************
@@ -496,7 +462,41 @@ We generalize the OntoIOp/DOL (cite DOL) concept for structured OMS (ontologies,
 \end{description}
 
 
-To assist in defining operations on structured knowledge sources while still maintaining generality, the collection structure of a structured knowledge resource is simply required to arise from a monad functor on the knowledge resource types. Collection structures that satisfy these requirement include sets, bags and sequences, but other structures also meet these requirements.
+To assist in defining operations on structured knowledge sources while still maintaining generality, the collection structure of a structured knowledge resource is simply required to arise from a monad functor on the knowledge resource types. Collection structures that satisfy these requirement include sets, bags and sequences, but other useful structures also meet these requirements.
+
+\subsection{Monads}
+In seminal work that established a theoretical foundation for proving the equivalence of programs, Moggi\todo{cite  Moggi, Eugenio (1991). "Notions of computation and monads". Information and Computation 93 (1). doi:10.1016/0890-5401(91)90052-4.} applied the notion of monad from category theory\todo{cite MacLane} to computation.
+As defined in category theory, a monad  is an endofunctor on a category C (a kind of mapping from C into itself) which additionally satisfies some requirements (the monad laws).
+In functional programming, monads on a particular category are of interest - the category with types as objects and programs as arrows.
+For example, the List[\_] typeclass is a monad, e.g. List[Int] is a type that is a member of List[\_].
+
+Each monad has the following transformations (exemplified for the List monad where lists are denoted with angle brackets)
+\begin{itemize}
+\item unit: A $\Rightarrow$ M[A] lifts the input into the monad (e.g. unit(2) = $\langle$2$\rangle$)
+\item join: M[M[A]] $\Rightarrow$ M[A] collapses nested monad instances by one level (e.g. join($\langle$$\langle$1, 2$\rangle$, $\langle$3, 4$\rangle$$\rangle$) = $\langle$1, 2, 3, 4$\rangle$)
+\item map: (A $\Rightarrow$ B) $\Rightarrow$ (M[A] $\Rightarrow$ M[B]) takes a function between two generic types and returns a function relating the corresponding monadic types (e.g. map( s $\Rightarrow$ 2*s)($\langle$1, 2$\rangle$) = $\langle$2, 4$\rangle$)
+\end{itemize}
+Note that we choose the unit, join and map transformations as fundamental in this development of the monad laws because it is useful for later discussion on tree structures, whereas the usual theoretical treatment, based on unit and bind = join o map, is more concise.
+
+The map transformation defines a functor M, satisfying the functor laws:
+\begin{description}
+\item[Functor Identity] map(id)(y) = y
+\item[Functor Associativity] map(f o g) = map(f) o map(g)
+\end{description}
+where id is identity function s $\Rightarrow$ s.
+The unit and join transformations arise from natural transformations related to M, satisfying:
+\begin{description}
+\item[Unit from Natural Transformation] map(f)(unit(x)) = unit(f(x))
+\item[Join from Natural Transformation] join(map(join)(x)) = join(join(x))
+\end{description}
+
+Further, these transformations must obey the monad laws:
+\begin{description}
+\item[Monad Left Identity] join(map(unit)(x)) = x
+\item[Monad Right Identity] join(unit(x)) = x
+\item[Monad Associativity] join(map(map(f))(x)) = map(f)(join(x))
+\end{description}
+
 
 Monads of relevance to API4KB include
 \begin{description}
@@ -512,6 +512,9 @@ Monads of relevance to API4KB include
 \end{description}
 These monad functors may be composed; for example, given a basic knowledge expression type E, the type (State o Try o List) [E] = State[Try[List[E]]] may be defined.
 %be of type State of type Try of type List of type basic knowledge expression.
+In general, the composition of monads is not necessarily a monad. 
+%For example, (Set o List)[\_] is a typeclass, with members of type Set[List[A]], i.e. sets of lists of type A.
+
 
 
 \subsection{Monadic Tree Structures}
