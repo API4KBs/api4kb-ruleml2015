@@ -84,7 +84,7 @@ After providing some background notions in Section \ref{sec:bg}, we will describ
 \todo[inline]{Finally, use cases and related works....(complete after final use cases are written }
 
 
-\section{The API4KB RFP and OntoIOp RFPs}
+\section{The API4KB and OntoIOp RFPs}
 \label{sec:bg}
 %\subsection{The API4KB RFP + DOL}
 
@@ -127,8 +127,8 @@ The principle upper-level concepts in the API4KP metamodel are
 %\item[Communicating Entity] architectural elements that may communicate (initiate, forward or receive communications) with other elements.
 \item[Knowledge Source:] source of machine-readable information with semantics. Examples: an RDF graph, a mutable RDF source, an RDF dataset with specified semantics, or a relational database with a mapping to an ontology.
 \item[Environment:] mathematical structure of mappings and members, where the domain and codomains of the mappings are members of the environment.  Example: a KRR language environment containing semantics-preserving translations from RDF and OWL into Common Logic.
-\item[Knowledge Operation:] function (possibly with side-effects) having a knowledge source, environment or operation type in its signature. Examples: creating, modifying, deleting, parsing, translating, querying, downloading, or reasoning about a knowledge source.
-\item[Knowledge Event:] successful execution of a knowledge operation.
+\item[Knowledge Operation:] function (possibly with side-effects. i.e. effects beyond the output value returned) having a knowledge source, environment or operation type in its signature. Examples: creating, modifying, deleting, parsing, translating, querying, downloading, or reasoning about a knowledge source.
+\item[Knowledge Event:] successful evaluation or execution of a knowledge operation by a particular application at a particular time.
 \end{description}
 These definitions are intentionally vague so as to be adaptable to a variety of implementation paradigms.
 
@@ -380,25 +380,20 @@ xsd:            & \url{http://XSD_Datatype_namespace }     \\ \hline
 \end{table}
 
 
-\subsection{Operations, Events, Proficiencies and Roles}
+\subsection{Operations and Events}
 \label{sec:op}
 
-In the API4KP framework, the building blocks for all knowledge operations are \emph{actions} -- unary knowledge operations, possibly with side-effects and possibly of higher-order. To maintain a separation of concerns, side-effectful actions are assumed to be void, with no significant return value. Knowledge operations are either actions or are built up from the composition of actions. 
-
-Utility actions for lifting and lowering the knowledge source level are provided. Other kinds of side-effect-free actions are horizontal, with input and output at the same knowledge source level (e.g. for constructing structured knowledge sources), or higher-order, where input or output are actions (e.g. for querying).
+In the API4KP framework, the building blocks for all knowledge operations are \emph{actions} -- unary atomic knowledge operations, possibly with side-effects and possibly of higher-order. To maintain a separation of concerns, side-effectful actions are assumed to be void, with no significant return value. Particular kinds of actions include:
 
 \begin{description}
-    \item[Side-effectful Operation:] knowledge operation with effects beyond the output value returned
-    \item[Side-effect-free Operation:] knowledge operation with no effects beyond the output value returned
-    \item[Action:] unary atomic knowledge operation, possibly with side-effects
-    \begin{description}
       \item[Lifting Action:] side-effect-free action whose output is at a higher knowledge source level than the input
       \item[Lowering Action:]  side-effect-free action whose output is at a lower knowledge source level than the input
       \item[Horizontal Action:] side-effect-free action whose output is at the same knowledge source level as the input
       \item[Idempotent Action:] side-effect free action that is equal to its composition with itself (A = A o A)
       \item[Higher-Order Action:] side-effect-free action whose input or output (or both) is an action
-    \end{description}
 \end{description}
+Lifting and lowering are utility actions for changing the knowledge source level, e.g. parsing and IO. 
+Horizontal actions are useful e.g. for constructing structured knowledge sources, while higher-order actions are needed to specify more complex operations e.g. querying.
 
 In this framework, we define two void actions that have side-effects on the state of mutable knowledge resources:
   \begin{description}
@@ -526,7 +521,7 @@ We generalize this approach for defining the semantics of structured expressions
 Let N[\_] be the M-tree monad corresponding to N[E] = M[E or M[N[E]]].
 The unit function for N is the same as the unit function for M.
 The map and join functions for N are defined from a straight-forward recursive application of the map and join functions for M.
-The implementation may be assisted by the Either bifunctor to handle the union types, especially in programming languages that do not support union typeclasses.
+The satisfaction of the monad laws is dependent on the use of the Either bifunctor to handle the union types, so that the left or right intention is preserved even in the case when the types are not disjoint.
 
 If E is a type of basic knowledge resources, then N[E] is the type of M-tree-structured knowledge resources, and
 Q[E] = E or N[E] is the corresponding type of knowledge resources (either basic or structured).
@@ -561,13 +556,18 @@ Notice that the expressions of type B are not required to be in a knowledge repr
 Structured expressions can always be constructed in a monad that has more structure than necessary for compatibility with the semantics of a given language.
 For example, List and Stream monads can be used for monotonic, effect-free languages even though the Set monad has sufficient structure for these languages;
 a forgetful functor is used to define the semantics in the monad with greater structure in terms of the monad of lesser structure.
-A heterogeneous structure of languages containing some languages with effects and others without effects (e.g. an ECA rulebase supported by ontologies) would thus could make primary use of a monad that preserves order, such as List or Stream, while permitting some members of the collection to have a SetTree structure. In particular, if A is an ECA rulebase language and B is an ontology language, then ListTree[ A or SetTree[B]] would be an appropriate monadic tree structure for heterogeneous knowledge expressions in these two languages. 
-%In general, monads combined using disjunction can be used as a basis for tree structures as follows: 
+A heterogeneous structure of languages containing some languages with effects and others without effects (e.g. an ECA rulebase supported by ontologies) could thus make primary use of a monad that preserves order, such as List or Stream, while permitting some members of the collection to have a SetTree structure. 
+%In particular, if A is an ECA rulebase language and B is an ontology language, then ListTree[ A or SetTree[B]] would be an appropriate monadic tree structure for heterogeneous knowledge expressions in these two languages. 
+%In general, a biased disjunction (Either) of monads instances of the same generic type can serve as a basis for tree structures as follows: 
 % M[E] = Either[M1[E], M2[E]] is a monad provided:
 %    unit_M(x) = Right( unit_M2(x))
 %    map_M(x)  = map_M1(x) if x is Left, map_M2(x) if x is Right
 %    join_M(x) = join_M2(x) if x is Right[Right],
-%                otherwise, the value is obtained by lifting x into Right[Right] by applying a full functor G:M1 => M2 that is a right adjoint of the forgetful functor F: M2 => M1
+%                otherwise, the value is obtained by lifting x into Right[Right] by 
+% applying a (full) lifting functor G:M1 => M2 that is a right adjoint of a 
+% (restricted) forgetful functor F: M2 => M1
+% Purpose: For use with two languages, A and B where M2 is a monad that is compatible with A and B, while
+% M1 is a monad compatible only with A.
 
 
 
@@ -606,6 +606,8 @@ The smart home system may be modelled using a State monad, where changes to the 
   
 
 \subsection{Java Implementation of API4KP}
+
+The monad laws have been verified experimentally for SetTree and ListTree monads by implementation in Java8 together with the Functional Java libraries, with the source available on Github\footnote{\url{https://github.com/ag-csw/Java4CL}}. Informal tests confirm that the map and join operations are linear in the size of the collection, as expected.
 
 
 
@@ -663,6 +665,8 @@ The API4KP metamodel introduces the following generalizations of OntoIOp/DOL con
 \end{itemize}
 
 The variety of monad structures necessary to model the diversity of usecases demonstrates that a high level of abstraction is needed to define "universal" operations for modifying knowledge resources - adding, subtracting or modifying in place. Category theory provides the tools for these abstractions, through applicative functors (a generalization of monads having a binary operator allowing a structure of functions to be applied to another structure), catamorphisms (generalization of aggregation over a list to other monads) and anamorphisms (e.g. generation of a list from a seed and recursion formula).
+
+The Kleisli Query System \todo{ cite \url{http://homepages.inf.ed.ac.uk/wadler/realworld/kleisli.html}} has implemented a similar approach for data computations.
 
 \section{Conclusion and Future Work}
 \label{conc}
