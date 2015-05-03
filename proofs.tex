@@ -128,9 +128,9 @@ We generalize this approach for defining the semantics of structured expressions
 \item a post-condition contract for side-effects is specified by a truth-valued function P(F, y) for all supported void knowledge actions F and all y in E or M[E].
 \end{itemize}
 
-Let N[\_] be the M-tree monad corresponding to the minimal (finite) fixed point of N[E] = M[E or M[N[E]]], where "A or B" is used as an abbreviation for an unbiased Either[A, B] bifunctor.
+Let N[\_] be the M-tree monad corresponding to the minimal (finite) fixed point of N[E] = M[E + N[E]], where "A + B" is the coproduct, which can also be denoted as a bifunctor Either[A, B].
 The unit function for N is the same as the unit function for M.
-The map and join functions for N are defined from a straight-forward recursive application of the map and join functions for M.
+The map and join functions for N are defined from a straight-forward recursive application of the map and join functions for M, given in the next section.
 The satisfaction of the monad laws is dependent on the use of the Either bifunctor to handle the union types, so that the left or right intention is preserved even in the case when the types are not disjoint. In particular,
 $$join_N = (join_M o map_M)( bimapOne( id) (unit_M o unit_R o join_N) ) $$
 $$ map_N(f) = map_M( bimap(f, map_N(f)) ) $$
@@ -154,7 +154,7 @@ Then for all y $\in$ Q[E], we may define the interpretation I(y) = I(flatten(y))
 Implementations that honor the semantics must satisfy P(F, y) = P(F, flatten(y)), where P is a function representing the post-conditions after execution of side-effectful knowledge operation F on the knowledge resource y.
 
 % composition of monads is a functor (not necessarily a monad)
-Like other monads, M-tree monads can be combined through composition.
+Like other monads, M-tree monads are functors and so can be combined through composition.
 For example, a system of multiple concurrent threads may be modelled as a Set-structure of Stream-structured knowledge resources: SetTree o StreamTree.
 %   StreamTree[A] = Stream[A or Stream[StreamTree[A]]]
 
