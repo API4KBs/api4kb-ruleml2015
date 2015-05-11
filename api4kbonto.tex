@@ -42,13 +42,13 @@ Department of Biomedical Informatics, Arizona State University, USA\\
 \maketitle
 
 \begin{abstract}
-API4KP target the basic administration services as well as the retrieval, modification and processing of expressions in machine-readable languages, including but not limited to knowledge representation and reasoning (KRR) languages, within heterogeneous (multi-language, multi-nature) knowledge platforms. KRR languages of concern in this paper include but are not limited to RDF(S), OWL, RuleML and Common Logic, and the knowledge platforms may support one or several of these. Additional languages, e.g. SQL, XMPP, are integrated using mappings into KRR languages. A general notion of structure for knowledge sources is developed using monads. The presented API4KB metamodel, in the form of an OWL ontology, provides an abstract syntax for communications about knowledge sources and environments, including a classification of knowledge source by mutability, structure, and an abstraction hierarchy as well as the use of performatives (inform, query, ...), languages, logics, dialects, formats and lineage. Finally, a framework is provided for describing operations on knowledge sources and environments and their execution, which may be used for requests (message-passing).
+API4KP (API for Knowledge Platforms) is a standard development effort that targets the basic administration services as well as the retrieval, modification and processing of expressions in machine-readable languages, including but not limited to knowledge representation and reasoning (KRR) languages, within heterogeneous (multi-language, multi-nature) knowledge platforms. KRR languages of concern in this paper include but are not limited to RDF(S), OWL, RuleML and Common Logic, and the knowledge platforms may support one or several of these. Additional languages, e.g. SQL, Extensible Messaging and Presence Protocol (XMPP), are integrated using mappings into KRR languages. A general notion of structure for knowledge sources is developed using monads. The presented API4KP metamodel, in the form of an OWL ontology, provides an abstract syntax for communications about knowledge sources and environments, including a classification of knowledge source by mutability, structure, and an abstraction hierarchy as well as the use of performatives (inform, query, ...), languages, logics, dialects, formats and lineage. Finally, the metamodel provides a classification of operations on knowledge sources and environments which may be used for requests (message-passing).
+%FIXME Tara/Davide/Adrian/Roy the abstract needs to be harmonized with the intro and conclusion.
 \end{abstract}
 
 %
 %\section{Introduction}
 %\label{intro}
-%TBD
 % RDF graph, RDF source, RDF dataset
 % http://www.w3.org/TR/2014/REC-rdf11-mt-20140225/
 
@@ -82,33 +82,36 @@ A ``connected patient'' system gathers input from biomedical devices, part of a 
 The data can be represented in a device-specific format (e.g. using XMPP\cite{XMPP}) or as streams of RDF graphs over time. 
 The vocabularies referenced in the streams include units of measure, time, geospatial and biomedical ontologies, expressed in RDF(S), OWL or Common Logic (CL). 
 Healthcare providers will submit SPARQL queries and receive incremental streams as new data becomes available. 
-A Clinical Decision Support System (CDS), implemented using event-condition-action (ECA) rules, will also react to events simple (e.g. a vital parameter exceeding a threshold) and complex \todo{cite some CEP? keep examples?} (e.g. a decreasing trend in the average daily physical activity) and intervene with alerts and reminders. 
+A Clinical Decision Support System (CDS), implemented using event-condition-action (ECA) rules, will also react to events simple (e.g. a vital parameter exceeding a threshold) and complex \todo{FIXME cite some CEP? keep examples?} (e.g. a decreasing trend in the average daily physical activity) and intervene with alerts and reminders. 
 If an alert is not addressed in a timely fashion, it will escalate to another designated recipient. 
 Some patients will qualify for clinical pathways and the system will maintain a stateful representation of their cases, allowing clinicians to check for compliance with the planned orders (e.g. drug administrations, tests, procedures, \dots). 
 As medical guidelines evolve, the logic of the pathway may need revision: queries to the patient's history should be contextualized to whatever logic was valid at the time orders were placed.
 %\end{enumerate}
 
-%To allow for the greatest generality for these use cases, we will not assume that communications are local (in the virtual address space) or synchronous (although these properties could apply in some architectures), but support typical distributed architecture models by API4KB.  
+%To allow for the greatest generality for these use cases, we will not assume that communications are local (in the virtual address space) or synchronous (although these properties could apply in some architectures), but support typical distributed architecture models by API4KP.  
 From a systems-oriented perspective communicating entities in distributed systems are processes (or simple nodes in primitive environments without further abstractions) and from a programming perspective they are objects, components or services/agents. They may be single-sorted or many-sorted, with sorts being characterized by the kind of communications that may be initiated, forwarded or received, and by the kind of entity that may be received or forwarded from or sent to.
 Communication channels may in general be many-to-many and uni- or -bidirectional. Each communication has a unique source; multi-source communications are not modelled directly, but are emulated by knowledge sources that publish streams that may be merged to give the appearance of multiple sources. We will allow for failure, either in communication or in execution, but do not specify any particular failure recovery strategy. 
-Various types of communication paradigms are supported from strongly-coupled communication via low-level inter-process communication with ad-hoc network programming, loosely coupled remote invocation in a two-way exchange via interfaces  (RPC/RMI/Component/Agent) between communicating entities, to decoupled indirect communication, where sender and receiver are time and space uncoupled via an intermediary such as a publish-subscribe and event processing middleware.
+Various types of communication paradigms are supported from strongly-coupled communication via low-level inter-process communication with ad-hoc network programming, loosely coupled remote invocation in a two-way exchange via interfaces  (RPC/RMI/Component/Agent)
+% FIXME Do RPC and RMI need to be defined?
+between communicating entities, to decoupled indirect communication, where sender and receiver are time and space uncoupled via an intermediary such as a publish-subscribe and event processing middleware.
 The communication entities fulfill different roles and responsibilities (client, server, peer, agent) in typical architectural styles such as client-server, peer-to-peer and multi-agent systems. Their placement (mapping) on the physical distributed infrastructure allows many variations (partitioning, replication, caching and proxing, mobile) such as deployment on multiple servers and caches to increase performance and resilience, use of low cost computer resources with limited hardware resources or adding/removing mobile computers/devices.
 
-Given this variety of architectural requirements, an abstraction is required to facilitate the interchange, deployment, revision and ultimately consumption of formal, declarative pieces of knowledge within a knowledge-driven application. In 2010 the OMG published the first formalized set of KDA requirements in an RFP titled "the API for Knowledge Bases (API4KB)". In 2014 the OMG published a second RFP titled "Ontology, Model, and Specification Integration and Interoperability (OntoIOp)"\cite{OntoIOp}. This second RFP contains the requirements for a substantial part of the API4KB, and a submission, called DOL\cite{DOL} is near completion. To address the remaining aspects of the API4KB RFP, a multi-disciplinary working group is creating a standard meta-API, called API4KP, for interaction with the Knowledge Platforms at the core of KDAs. 
+Given this variety of architectural requirements, an abstraction is required to facilitate the interchange, deployment, revision and ultimately consumption of formal, declarative pieces of knowledge within a knowledge-driven application. In 2010 the Object Management Group (OMG) published the first formalized set of KDA requirements in an RFP titled "the API for Knowledge Bases (API4KB)". In 2014 the OMG published a second RFP titled "Ontology, Model, and Specification Integration and Interoperability (OntoIOp)"\cite{OntoIOp}. This second RFP contains the requirements for a substantial part of the API4KB, and a submission, called DOL\cite{DOL} is near completion. To address the remaining aspects of the API4KB RFP, a multi-disciplinary working group is creating a standard meta-API, called API4KP, for interaction with the Knowledge Platforms at the core of KDAs. 
 
-To provide a semantic foundation for the operations and their arguments, we have created a metamodel of knowledge sources and expressed it as an OWL ontology\footnote{\url{https://github.com/API4KBs/api4kbs}}.
+To provide a semantic foundation for the API4KP operations and their arguments, we have created a metamodel of knowledge sources and expressed it as an OWL ontology\footnote{\url{https://github.com/API4KBs/api4kbs}}.
 %After providing some background notions in Section \ref{sec:bg}, 
-The primary concepts  of the metamodel are described in Sec.~\ref{sec:metamodel}, with details for structured knowledge resources 
-and their relationship to monadic tree structures in Sec.~\ref{sec:structure}.
-In Sec.~\ref{sec:proof} we provide a proof-of-concept based on application to the scenario, 
-%FIXME don't create false expectations
-identification of parallels to existing implementations, and prototypical implementation of monadic tree structures.
+The primary concepts  of the API4KP metamodel are described in Sec.~\ref{sec:metamodel}, with details for structured knowledge resources 
+and their relationship to nested monad structures in Sec.~\ref{sec:structure}.
+In Sec.~\ref{sec:proof} we provide an application of the metamodel to the healthcare scenario.
+%FIXME Tara/Davide/Adrian don't create false expectations
+% 
+identification of parallels to existing implementations, and prototypical implementation of nested monad structures.
 %Related work is discussed in Sec.~\ref{sec:related}, with conclusions and future work described in Sec.~\ref{sec:conc}.
 
 
 %\section{The API4KB and OntoIOp RFPs}
 %\label{sec:bg}
-%\subsection{The API4KB RFP + DOL}
+%\subsection{The API4KB RFP or DOL}
 
 %In the early to mid-2000s, a number of Object Management Group (OMG) members developed applications that explored various aspects of semantic technologies.  As practitioners of Model Driven Architecture (MDA) methods \cite{Mellor:2004:MD:983969} and information architecture (IA), they recognized limitations in the ability to modularize and reuse aspects of semantic technology in the applications they were constructing.  IA in this context is focused on defining, developing, and managing information, and in particular information models, in order to separate content and context-specific concerns from other aspects of the software, process, or service architecture of a system or business.  They teamed to develop an OMG Request for Proposal (RFP) \cite{API4KB}, that asked for: 
 %\begin{itemize}
@@ -135,10 +138,10 @@ identification of parallels to existing implementations, and prototypical implem
 
 
 \vspace{-0.3cm}
-\section{API4KP Metamodel}
+\section{Upper-level Concepts and Basic Knowledge Resources}
 \label{sec:metamodel}
 The API4KP metamodel is hierarchical, with a few under-specified concepts at the upper levels, and more precisely defined concepts as subclasses.
-% FIXME add high-level introduction to metamodel
+% FIXME Tara/Davide add high-level introduction to metamodel
 These upper-level concepts
 % blah blah blah
 %\subsection{Upper Levels of the Metamodel}
@@ -147,8 +150,8 @@ The principle upper-level concepts in the API4KP metamodel are
 \begin{description}
 %\item[Communicating Entity] architectural elements that may communicate (initiate, forward or receive communications) with other elements.
 \item[Knowledge Source:] source of machine-readable information with semantics. Examples: a stream of RDF graphs providing data from biomedical devices, a stateful representation of a patient's history with OWL snapshots, or a database with a mapping to an ontology.
-% FIXME connect database to running example
-\item[Environment:] mathematical structure of mappings and members, where the domain and codomains of the mappings are members of the environment.  Example: a KRR language environment containing semantics-preserving translations from RDF and OWL into Common Logic, assisting in the integrated interpretation of a stream of RDF graphs and OWL ontologies.
+% FIXME Davide connect database to running example
+\item[Environment:] mathematical structure of mappings and members, where the domain and codomains of the mappings are members of the environment.  Example: a KRR language environment containing semantics-preserving translations from RDF and OWL into CL, assisting in the integrated interpretation of a stream of RDF graphs and OWL ontologies.
 \item[Knowledge Operation:] function (possibly with side-effects. i.e. effects beyond the output value returned) having a knowledge source, environment or operation type in its signature. Examples: 
 % archival: creating, modifying, deleting, parsing, translating, querying, downloading, or reasoning about a knowledge source.
  publishing or subscribing to a stream of RDF graphs;
@@ -157,7 +160,8 @@ The principle upper-level concepts in the API4KP metamodel are
  checking for compliance with plans;
  revising an ontology of guidelines.
 \item[Knowledge Event:] 
-% FIXME should Event be renamed?
+% FIXME Tara provide reference to BWW and discussion of 
+% similarity
 successful evaluation or execution of a knowledge operation by a particular application at a particular time
 Examples:
 when a nurse activates a biomedical device, a stream of RDF graphs is published describing a patient's vital signs;
@@ -214,7 +218,7 @@ These definitions are intentionally vague so as to be adaptable to a variety of 
 %    \item [Partitioning:] API4KP services provided by multiple servers by partitioning a set of objects in which the service is based and distribute them between multiple-services.
 %    \item [Replication:] Server maintain replicated API4KP server copies of them on several hosts (horizontal replication) or distributed API4KP functions into distributed peers.
 %    \item [Caching] and [Proxying:] A [Cache] stores recently used knowledge resources. Caches might be co-located with each client or located in a Proxy. [Proxy] provides a surrogate or placeholder for a API4KP knowledge object to control access to it.
-%    \item [Mobile:] Mobile (executable) code that is downloaded to a client or mobile components/agents, which are running programs (both code and data/resources + state) that travel from one computer / environment to another.
+%    \item [Mobile:] Mobile (executable) code that is downloaded to a client or mobile components/agents, which are running programs (both code and data/resources or state) that travel from one computer / environment to another.
 %\end{description}
 
 %\vspace{-0.3cm}
@@ -222,13 +226,13 @@ These definitions are intentionally vague so as to be adaptable to a variety of 
 We have developed a hierarchy of \emph{knowledge source level} of abstraction that is a generalization of the FRBR \cite{FRBR} Work-Expression-Manifestation-Item (WEMI) hierarchy of abstraction tailored for machine-readable KRR languages. The fundamental building blocks of knowledge sources are \emph{basic knowledge resources}, which are immutable knowledge sources without structure.
 Subclasses of basic knowledge resources are defined according to their knowledge source level. 
 \begin{description}
-\item[Basic Knowledge Expression:] well-formed formula in the abstract syntax of a machine-readable language.\footnote{The use of "basic" in API4KP differs from its usage in DOL - a DOL basic OMS is a set, and corresponds to a Set-structured knowledge asset in API4KP.}
+\item[Basic Knowledge Expression:] well-formed formula in the abstract syntax of a machine-readable language.\footnote{The use of "basic" in API4KP differs from its usage in DOL - a DOL basic OMS  (ontologies, models and specifications) is a set, and corresponds to a Set-structured knowledge asset in API4KP.}
 Example KE1: the instance of the OWL 2 DL abstract syntax for a version of a biomedical ontology from an ontology series KA1 
 defining observable entities
-%\footnote{FIXME provide link to a SNOWMED ontology series}
+%\footnote{FIXME Davide provide link to a SNOWMED ontology series}
 (see also the definition of Basic Knowledge Asset below). 
 This ontology differs from other versions of the series only in the natural language definitions.
-\item[Basic Knowledge Manifestation:] character-based embodiment of a basic knowledge expression in a concrete dialect. Example KM1: the OWL/RDF XML abstract DOM instance of example KE1.
+\item[Basic Knowledge Manifestation:] character-based embodiment of a basic knowledge expression in a concrete dialect. Example KM1: the OWL/RDF XML Document Object Model (DOM) document instance of example KE1.
 \item[Basic Knowledge Item:] single exemplar of a basic knowledge manifestation in a particular location. Example KI1: a file on a network server embodying example KM1.
 \item[Basic Knowledge Asset:] equivalence class of basic expressions determined by the equivalence relation of an asset environment (see Sec.~\ref{krassetenv}.) Example KA1: an OWL2 DL series for a biomedical ontology, viewed as an equivalence class of basic knowledge expressions in OWL2 DL, including example KE1, according to a semantics-preserving environment for the OWL2 DL language where the mapping to the focus language strips the natural language definitions from the axioms.
 \end{description}
@@ -253,7 +257,7 @@ Following RDF concepts\cite{RDF2014}, knowledge sources are characterized as mut
 A \emph{mutable knowledge source} is a container that has, at any point in time, an explicit state that is fully represented by a knowledge resource, e.g. the snapshot of a patient's current condition (with timestamp). The language, structure and content of a mutable knowledge source may change over time; however, the abstraction level is unchanging. 
 
 We distinguish between the \textit{implicit} state that a mutable knowledge source holds indirectly when operators such as actions, complex  event patterns or aggregations are computed on it, and the explicit state that evolves with time and that can be managed explicitly by an additional state transformer component responsible for \textit{explicit} state management, concurrency control, reasoning (specifically, inference of state deltas), and state updates. 
-There are various ways to manage explicit state, e.g. embedded inside the processors of the knowledge source in global variables or state accumulating variables or tuples that are available either locally to an individual operator or across the operators as a shared storage, or with explicit state and concurrency control which lies outside of knowledge resource processors, e.g. by threading the variables holding state through a functional state transformer and by using State monads (see \ref{sec:structure}), which exist within the context of another computation or transformation, thus allowing to attach state information to any kind of functional expression.
+There are various ways to manage explicit state, e.g. embedded inside the processors of the knowledge source in global variables or state-accumulating variables or tuples that are available either locally to an individual operator or across the operators as a shared storage, or with explicit state and concurrency control which lies outside of knowledge resource processors, e.g. by threading the variables holding state through a functional state transformer and by using State monads (see \ref{sec:structure}), which exist within the context of another computation or transformation, thus allowing to attach state information to any kind of functional expression.
 
 
 %A composable environment contains the mappings that are the composition of all compatible pairs of its mappings. An associative environment satisfies an associative property on composition of its mappings. A categorical environment is an associative environment that includes an identity mapping for every member.
@@ -295,11 +299,11 @@ A \emph{knowledge source description} is a knowledge resource whose subject matt
 \hline
 \textbf{Key} & \textbf{Value} \\ \hline
 Y            & exactly 1      \\ \hline
-Y+           & 1 or more      \\ \hline
+Yor           & 1 or more      \\ \hline
 Y?           & 0 or 1         \\ \hline
 Y*           & 0 or more      \\ \hline
 N            & exactly 0      \\ \hline
-I[+?*]       & indirect      \\ \hline
+I[or?*]       & indirect      \\ \hline
 \end{tabular}
 \caption{Legend}
 \label{legend}
@@ -420,7 +424,7 @@ xsd:            & \url{http://www.w3.org/2001/XMLSchema#}     \\ \hline
 \subsection{Operations and Events}
 \label{sec:op}
 
-In the API4KP framework, the building blocks for all knowledge operations are \emph{actions} -- unary functions, possibly with side-effects and possibly of higher-order. Actions are defined in terms of their possible events. To maintain a separation of concerns, side-effectful actions are assumed to be void, with no significant return value. Particular kinds of actions include:
+In the API4KP metamodel, the building blocks for all knowledge operations are \emph{actions} -- unary functions, possibly with side-effects and possibly of higher-order. Actions are defined in terms of their possible events. To maintain a separation of concerns, side-effectful actions are assumed to be void, with no significant return value. Particular kinds of actions include:
 
 \begin{description}
       \item[Lifting Action:] side-effect-free action whose output is at a higher knowledge source level than the input
@@ -432,7 +436,7 @@ In the API4KP framework, the building blocks for all knowledge operations are \e
 Lifting and lowering are utility actions for changing the knowledge source level, e.g. parsing and IO. 
 Horizontal actions are useful e.g. for constructing structured knowledge sources, while higher-order actions are needed to specify more complex operations e.g. querying.
 
-In this framework, we define two void actions that have side-effects on the state of mutable knowledge resources:
+In the metamodel, we define two void actions that have side-effects on the state of mutable knowledge resources:
   \begin{description}
     \item[Put:] void action whose input is a mutable knowledge source and has the side-effect of setting the mutable knowledge source to a particular, fully-specified state
     \item[Update:] void action whose input is a mutable knowledge source and has the side-effect of setting the mutable knowledge to a new state that is the result of applying a side-effect-free action to the current state
@@ -460,13 +464,13 @@ In this framework, we define two void actions that have side-effects on the stat
 \vspace{-0.8cm}
 \section{Structured Knowledge Resources}
 \label{sec:structure}
-We generalize the DOL concept for structured OMS (ontologies, models and specifications) to define a concept of structured knowledge resource for each level of abstraction. In DOL, a structured OMS "results from other basic and structured OMS by import, union, combination, ... or other structuring operations".
-In API4KP, A \emph{structured knowledge resource} is a collection whose components are knowledge resources of the same level of abstraction; structuring knowledge operations are provided in Sec.~\ref{sec:op}.
+We generalize the DOL concept for structured OMS to define a concept of structured knowledge resource for each level of abstraction. In DOL, a structured OMS ``results from other basic and structured OMS by import, union, combination, ... or other structuring operations''.
+In API4KP, A \emph{structured knowledge resource} is a collection whose components are knowledge resources of the same level of abstraction; structuring knowledge operations are described in Sec.~\ref{sec:op}.
 \begin{description}
-\item[Structured Knowledge Expression:] collection of knowledge expressions (either structured or basic), which are not necessarily in the same language and may themselves have structure. ExampleKE2: a heterogeneous collection of streaming data and RDF graphs, together with static OWL ontologies and Common Logic texts, and ECA rules describing actions of a CDS. Example KE3: the OWL 2 DL ontology series KA1, viewed as a collection of expressions rather than an equivalence class.
-\item[Structured Knowledge Manifestation:] collection of knowledge manifestations (either structured or basic), which are not necessarily in the same language or dialect and may themselves have structure. Example KM2: a heterogeneous structure of RDF Turtle, OWL Manchester as sequences of string tokens, and XMPP, OWL/XML, ECA RuleML and Common Logic XCL2 as XML abstract DOM documents embodying example KE2.
-\item[Structured Knowledge Item:] collection of knowledge items  (either structured or basic), which are not necessarily in the same language, dialect, format or location, and may themselves have structure. Example KI2:  a heterogeneous structure of an RDF triple store, network connections to binary input streams cached in a MySQL database, RuleML XML files on a local hard drive and Common Logic XCL2 files on a network server in a content management system, exemplifying example KM2.
-\item[Structured Knowledge Asset:] collection of knowledge assets  (either structured or basic), which are not necessarily according to the same environment, but where there is a unique language that is the focus of the environment of each component. Example KA2: a heterogeneous structure of assets conceptualized from the RDF, OWL and Common Logic expressions of example KE2 according to an environment that provides translations from RDF or OWL into Common Logic, and an ontology-based data access (OBDA) source schema providing a mapping from XMPP schemas to OWL.
+\item[Structured Knowledge Expression:] collection of knowledge expressions (either structured or basic), which are not necessarily in the same language and may themselves have structure. Example KE2: a heterogeneous collection of streaming data and RDF graphs, together with static OWL ontologies and CL texts, and ECA rules describing actions of a CDS. Example KE3: the OWL 2 DL ontology series KA1, viewed as a collection of expressions rather than an equivalence class.
+\item[Structured Knowledge Manifestation:] collection of knowledge manifestations (either structured or basic), which are not necessarily in the same language or dialect and may themselves have structure. Example KM2: a heterogeneous structure of RDF Turtle, OWL Manchester as sequences of string tokens, and XMPP, OWL/XML, ECA RuleML and CL XCL2 (the XML-based dialect of Common Logic Edition 2) as XML DOM documents embodying example KE2.
+\item[Structured Knowledge Item:] collection of knowledge items  (either structured or basic), which are not necessarily in the same language, dialect, format or location, and may themselves have structure. Example KI2:  a heterogeneous structure of an RDF triple store, network connections to binary input streams cached in a MySQL database, RuleML XML files on a local hard drive and CL XCL2 files on a network server in a content management system, exemplifying example KM2.
+\item[Structured Knowledge Asset:] collection of knowledge assets  (either structured or basic), which are not necessarily according to the same environment, but where there is a unique language that is the focus of the environment of each component. Example KA2: a heterogeneous structure of assets conceptualized from the RDF, OWL and CL expressions of example KE2 according to an environment that provides translations from RDF or OWL into CL, and an ontology-based data access (OBDA) source schema providing a mapping from XMPP schemas to OWL.
 \end{description}
 
 To assist in defining operations on structured knowledge sources while still maintaining generality, the collection structure of a structured knowledge resource is required to arise from a monadic functor (monad). Collection structures that satisfy these requirement include sets, bags and sequences, but other useful structures also meet these requirements.
@@ -476,7 +480,7 @@ To assist in defining operations on structured knowledge sources while still mai
 In seminal work that established a theoretical foundation for proving the equivalence of programs, Moggi\cite{moggi_notions_1991} applied the notion of monad from category theory\cite{MacLane1998} to computation.
 As defined in category theory, a monad  is an endofunctor on a category C (a kind of mapping from C into itself) which additionally satisfies some requirements (the monad laws).
 In functional programming, monads on the category with types as objects and programs as arrows are employed.
-For example, the List[\_] typeclass is a monad, e.g. List[Int] is a type that is a member of List[\_].
+For example, the List[\_] typeclass is a monad, e.g. List[Int], a list of integers, is a type that is a member of the List[\_] monad.
 
 Each monad has the following transformations (exemplified for the List monad where lists are denoted with angle brackets)
 \begin{itemize}
@@ -512,7 +516,7 @@ Monads of relevance to API4KP include, but are not limited to
 %\item [Future:] handles concurrency, describes a process whose output may become available at some time
 \item [IO:] handles IO side-effects, wraps a knowledge resource and an \emph{item configuration}
 \item [Task:] handles general side-effects, wraps a knowledge resource and a description of a side-effectful task
-\item [Observable:] handles concurrent streams, wraps a sequence of knowledge resources that become available over time
+\item [Stream:] a.k.a. Observable handles concurrent streams, wraps a sequence of knowledge resources that become available over time
 %\item [Key-Value Map:] handles labelled structure, a knowledge resource is associated with each key in some set
 %\item [Heterogeneous List:] handles a specified pattern of knowledge resource subclasses (e.g. RuleML rulebase together with an OWL ontology defining the sort hierarchy, CL text with sidecar RDF metadata).
 \item [State:] handles state, wraps a knowledge resource (the state) and implements state transitions
@@ -523,72 +527,73 @@ In general, the composition of monads is not necessarily a monad.
 %For example, (Set o List)[\_] is a typeclass, with members of type Set[List[A]], i.e. sets of lists of type A.
 
 \vspace{-0.3cm}
-\subsection{Monadic Tree Structures}
-The monad structures needed for API4KP are a restricted form of the monads seen in functional programming - rather than applying to category of all types, these monads are functors on a smaller category of knowledge resource types. In DOL, the concept of structured expression using sets is introduced. For example, let B be the category of (basic) Common Logic text expressions, and Q[B] = B or SetTree[B], where SetTree[B] = Set[Q[B]] = Set[B or SetTree[B]]  is the typeclass of SetTree-structured Common Logic expressions. In particular, a member of type SetTree[B] is specified by a Set whose members are either  basic leaves (of type B) or structured branches (of type SetTree[B]). 
+\subsection{Nested Monadic Structures}
+%FIXME Tara change Tree to Nested
+The monad structures needed for API4KP are a restricted form of the monads seen in functional programming - rather than applying to category of all types, these monads are functors on a smaller category of knowledge resource types. In DOL, the concept of structured expression using sets is introduced. For example, let B be the category of (basic) CL text expressions, and Q[B] = B + NestedSet[B], where NestedSet[B] = Set[Q[B]] = Set[B + NestedSet[B]]  is the recursive type definition of set-structured CL expressions. An instance of type NestedSet[B] is a Set whose members are either  basic leaves (of type B) or structured branches (of type NestedSet[B]). 
 
-The Set monad is appropriate for defining structured expressions in monotonic logics, like Common Logic, because the order and multiplicity of expressions in a collection has no effect on semantics. The semantics of CL is provided by the CL interpretation structure that assigns a truth-value to each basic CL text expression. The truth-value of a set of CL text expressions is true in an interpretation I if each member of the set maps to true in I. The truth value I(y) of a SetTree-structured CL expression y is defined to be I(flatten(y)), where flatten(y) is the set of leaves of y.
+The Set monad is appropriate for defining structured expressions in monotonic logics, like CL, because the order and multiplicity of expressions in a collection has no effect on semantics. The semantics of CL is provided by the CL interpretation structure that assigns a truth-value to each basic CL text expression. The truth-value of a set of CL text expressions is true in an interpretation I if each member of the set maps to true in I. The truth value I(y) of a NestedSet-structured CL expression y is defined to be I(flatten(y)), where flatten(y) is the set of leaves of y.
 
-We generalize this approach for defining the semantics of structured expressions to an arbitrary language L with basic expressions E and M-tree structured expressions. We assume that 
+We generalize this approach for defining the semantics of structured expressions to an arbitrary language L with basic expressions E and NestedM structured expressions. We assume that 
 \begin{itemize}
 \item M is a monad on the category of types,
 \item model-theoretic semantics is supplied through an interpretation structure I defined for basic expressions in E and simply-structured expressions M[E],
-\item a post-condition contract for side-effects is specified by a truth-valued function P(F, y) for all supported void knowledge actions F and all y in E or M[E].
+\item a post-condition contract for side-effects is specified by a truth-valued function P(F, y) for all supported void knowledge actions F and all y in E + M[E].
 \end{itemize}
 
-Let N[\_] be the M-tree monad corresponding to the minimal (finite) fixed point of N[E] = M[E + N[E]], where "A + B" is the coproduct (disjoint union) of types A and B, typically implemented as a bifunctor such as Scala's Either[A, B] or .
-The unit function for N is the same as the unit function for M.
-The map and join functions for N are defined from a straight-forward recursive application of the map and join functions for M.
-The proof\footnote{\url{https://github.com/API4KBs/api4kbs/blob/currying/Monad_Trees.pdf}\label{note:proof}} of the satisfaction of the monad laws is dependent on the use of the coproduct bifunctor to handle the union types, so that the left or right intention is preserved even in the case when the types are not disjoint. 
+Let N[\_] be the NestedM monad corresponding to the minimal (finite) fixed point of N[E] = M[E + N[E]], where "A + B" is the coproduct\footnote{The coproduct, a.k.a. disjoint union, A + B can be treated as the type (F x A) | (T x B), with the first (Boolean) argument of the pair providing the intention of left or right injection.} of types A and B.
+By convention, the NestedM monad is named by prepending "Nested" to the name of the underlying monad; thus, NestedSet[E] = Set[E + NestedSet[E]].
+
+The unit function for NestedM is the same as the unit function for M.  The map and join functions for NestedM are defined from a straight-forward recursive application of the map and join functions for M.
+The proof\footnote{\url{https://github.com/API4KBs/api4kbs/blob/currying/Monad_Trees.pdf}\label{note:proof}} that NestedM structures satisfy the monad laws dependens on the use of the coproduct to handle the union of types, so that the left or right intention is preserved even in the case when the types are not disjoint. 
 %In particular,
 %$$join_N = (join_M o map_M)( bimapOne( id) (unit_M o unit_R o join_N) ) $$
 %$$ map_N(f) = map_M( bimap(f, map_N(f)) ) $$
 % where casting between M and N is implicit and the following functions for the Either bifunctor are used:
-% $$bimapOne: (A=>C) => (B=>C) => ((A \mathop{\mathrm{or}} B)=> C)$$
-% $$  bimap   : (A=>C) => (B=>D) => ((A \mathop{\mathrm{or}} B)=> (C \mathop{\mathrm{or}} D))$$
+% $$bimapOne: (A=>C) => (B=>C) => ((A + B)=> C)$$
+% $$  bimap   : (A=>C) => (B=>D) => ((A + B)=> (C + D))$$
 % and $unit_R$ is the right-biased monadic type constructor for Either.
 
-If E is a type of basic knowledge resources, then N[E] is the type of M-tree-structured knowledge resources, and
-Q[E] = E or N[E] is the corresponding type of knowledge resources (either basic or structured). By convention, the M-tree monad is named by appending "Tree" to the name of the underlying monad; thus, SetTree[E] = Set[E or SetTree[E]].
-
-For all x, y $\in$ Q[E], we define\textsuperscript{\ref{note:proof}}  a flatten transformation. Informally
+If E is a type of basic knowledge resources, then the monad
+OptionallyNestedM[E] = E + NestedM[E] is the corresponding type of knowledge resources that are either basic or structured.
+For all x, y $\in$ Q[E] = OptionallyNestedM[E], we define\textsuperscript{\ref{note:proof}}  a flatten transformation. Informally
 \begin{description}
-\item[level:] Q[E] $\Rightarrow$ N[E]
+\item[level:] Q[E] $\Rightarrow$ N[E] = NestedM[E]
 %= bimapL(unit, id)
  $\ni$ level(x) $\doteq$ unit(x) if x $\in$ E,  x otherwise
-\item[flatten:] Q[E] $\Rightarrow$ E or M[E]$\ni$ flatten(y)   $\doteq$ y if y $\in$  E or M[E], \newline flatten( join$_N$(map$_M$(level)(y)) otherwise
+\item[flatten:] Q[E] $\Rightarrow$ E + M[E + 0]$\ni$ flatten(y)   $\doteq$ y if y $\in$  E + M[E + 0], \newline flatten( join$_N$(map$_M$(level)(y)) otherwise
 %= bimap(id, flatten_N)
 %\item[flatten_N:] N[E] $\Rightarrow$ M[E]  = bimap(id, flatten_N)
 \end{description}
-
+\noindent where 0 is the empty type.
 %where bimapL is a left-biased 
 Then for all y $\in$ Q[E], we may define the interpretation I(y) = I(flatten(y)), with entailments defined accordingly. %Similarly the pragmatics (side-effects) are specified by P(flatten(y)).
 Implementations that honor the semantics must satisfy P(F)(y) = P(F)(flatten(y)), where P(F) is a function representing the post-conditions after execution of side-effectful knowledge operation F on the knowledge resource y.
 
 % composition of monads is a functor (not necessarily a monad)
-%Like other monads, M-tree monads can be combined through composition.
-%For example, a system of multiple concurrent threads may be modelled as a SetTree-structure of streaming knowledge resources: SetTree o Stream.
-%   StreamTree[A] = Stream[A or Stream[StreamTree[A]]]
+%Like other monads, NestedM monads can be combined through composition.
+%For example, a system of multiple concurrent threads may be modelled as a NestedSet-structure of streaming knowledge resources: NestedSet o Stream.
+%  NestedStream[A] = Stream[A + Stream[NestedStream[A]]]
 
 \vspace{-0.3cm}
 \subsection{Heterogeneous Structures}
-% monad tree in two langauges, with focus A and leaf B
-Suppose A and B are expression types of two languages where an environment provides a semantics-preserving transformation T from B to A.
-Further suppose that an interpretation mapping I is defined on A or M[A].
-The Either type E = A or B defines the basic knowledge expressions in this environment, while structured expressions are N[E] where N is the M-tree monad  N[E].
-The Either type Q[E] = E or N[E] contains all expressions in this environment, basic or structured. 
+% nested monad in two langauges, with focus A and leaf B
+Suppose A and B are expression types of two languages where an environment provides a semantics-preserving transformation $T$ from B to A.
+Further suppose that an interpretation mapping I is defined on A + M[A + 0].
+The coproduct E = A + B defines the basic knowledge expressions in this environment, while structured expressions are N[E] = NestedM[E], and
+the coproduct Q[E] = E + N[E] is the type for all expressions in this environment, basic or structured. 
 
-Using the transformation T from the environment, we may define the interpretation of the M-tree structured expressions in terms of the interpretations of basic expressions in A and operations on monads. In particular,
+Using the transformation $T$ from the environment, we may define the interpretation $I$ of the NestedM structured expressions in terms of the interpretations of basic expressions in A and operations on monads. In particular,
 \begin{description}
-\item[S(x)] $\doteq$ T(x) if x $\in$ B, x otherwise
-\item[I(x)] $\doteq$ I( map(S)(flatten(x)) ) $\equiv$ I(flatten(map(S)(x)) )
+\item[$S$(x)] $\doteq$ $T$(x) if x $\in$ B, x otherwise
+\item[$I$(x)] $\doteq$ $I$( map($S$)(flatten(x)) ) $\equiv$ $I$(flatten(map($S$)(x)) )
 \end{description}
-Notice that the expressions of type B are not required to be in a knowledge representation language. They could be in a domain-specific data model based on XML, JSON or SQL. The semantics of expressions of type B are derived from the transformation to type A, the focus  knowledge representation language of the environment. API4KP employs this feature to model ontology-based data access (OBDA) and rule-based data access (RBDA).
+Notice that the expressions of type B are not required to be in a knowledge representation language. They could be in a domain-specific data model based on XML, JSON or SQL. The semantics of expressions of type B are derived from the transformation to type A, the focus  knowledge representation language of the environment. API4KP employs this feature to model OBDA and rule-based data access (RBDA).
 
 Structured expressions can always be constructed in a monad that has more structure than necessary for compatibility with the semantics of a given language.
 For example, List and Stream monads can be used for monotonic, effect-free languages even though the Set monad has sufficient structure for these languages;
 a forgetful functor is used to define the semantics in the monad with greater structure in terms of the monad of lesser structure.
-A heterogeneous structure of languages containing some languages with effects and others without effects (e.g. an ECA rulebase supported by ontologies) could thus make primary use of an M-tree monad that preserves order, such as ListTree or StreamTree, while permitting some members of the collection to have a SetTree structure. 
-%In particular, if A is an ECA rulebase language and B is an ontology language, then ListTree[ A or SetTree[B]] would be an appropriate monadic tree structure for heterogeneous knowledge expressions in these two languages. 
+A heterogeneous structure of languages containing some languages with effects and others without effects (e.g. an ECA rulebase supported by ontologies) could thus make primary use of an NestedM monad that preserves order, such as NestedList or NestedStream, while permitting some members of the collection to have a NestedSet structure. 
+%In particular, if A is an ECA rulebase language and B is an ontology language, then NestedList[ A + NestedSet[B]] would be an appropriate nested monad structure for heterogeneous knowledge expressions in these two languages. 
 %In general, a right-biased disjunction (REither) of monads instances of the same generic type can serve as a basis for tree structures as follows: 
 % M[E] = REither[M1[E], M2[E]] is a monad provided:
 %    unit_M(x) = Right( unit_M2(x))
@@ -616,12 +621,12 @@ While an immutable knowledge source (i.e. a knowledge resource) has a specific s
 %The State monad provides a convenient structure where the specification of state transitions is encapsulated together with the current value of the state.
 
 \vspace{-0.4cm}
-\section{Proof-of-Concept}
+\section{Metamodel Appplied to the Scenario}
 \label{sec:proof}
-%\subsection{Application of Monadic Tree Structures to Use Cases}
+%\subsection{Application of Nested Monadic Structures to Use Cases}
 
-An RDF stream from a biomedical device can be modelled using a Stream monad (also called Observable).
-A query registered against this RDF Stream will generate another Stream, with each item containing additions (if any) to the query result due to the assertion of the newly-arrived graph.
+In the connected patient scenario, an RDF stream from a biomedical device can be modelled using a Stream monad.
+A query registered against this RDF Stream will generate another Stream, with each Stream item containing additions (if any) to the query results due to the assertion of the newly-arrived graph.
 Because RDF has monotonic semantics, the accumulated query results will always be equivalent to the result of the query applied to the accumulated graphs of the stream.
 %Transformations that operate cumulatively, as this notion of query does, on a collection (e.g. set, list, stream, tree) are typically called "fold" or "traverse". (The "reduce" of map-reduce is a particular kind of fold.)
 %Therefore, 
@@ -629,13 +634,13 @@ Cumulative queries and other cumulative operations on Streams may be implemented
 
 %If it is known that a query update will be independent of portions of the stream older than some fixed time interval, then the fold may incorporate windowing of the stream (e.g. deleting graphs older than some duration from cache) to optimize the computation without affecting entailments.
 
-The connected-patient system uses a heterogeneous language environment to map input XMPP data from biomedical devices into a KRR language, e.g. RDF, employing terms from a vocabulary defined in a common ontology. Thus streaming data may be transformed into streaming knowledge which is queryable as discussed in the previous item. The structure of this system may be modelled as a SetTree of Streams, since each device streams its output asynchronously.
+The connected-patient system uses a heterogeneous language environment to map input XMPP data from biomedical devices into a KRR language, e.g. RDF, employing terms from a vocabulary defined in a common ontology. Thus streaming data may be transformed into streaming knowledge which is queryable as discussed in the previous item. The structure of this system may be modelled as a NestedSet of Streams, since each device streams its output asynchronously.
 
 State, Task and IO monads are appropriate to the use case of an active knowledge base where evaluation of an operation leads to side-effects; the choice of monad depends on the nature of the side-effects and the implementation.
 Equivalence of such knowledge resources requires not only the same entailments, but also side-effects that are  equivalent.
 The CDS monitoring our connected patient may be modelled using a State monad, where the sending of a message is a side-effect.
 
-The connected patient's case history may be modelled as a mutable knowledge asset  because of the possibility of correction of the history without a change of case identifier. The modular nature of medical records is amenable to SetTree (a set of laboratory test results) or ListTree (a procedure performed) structures. Although some aspects, such as the addition of new medical orders, would fit with the Stream structure, queries of the case history are not expected to produce streaming results, and so the mutable asset model is a better fit than a Stream-based model.
+The connected patient's case history may be modelled as a mutable knowledge asset  because of the possibility of correction of the history without a change of case identifier. The modular nature of medical records is amenable to NestedSet (a set of laboratory test results) or NestedList (a procedure performed) structures. Although some aspects, such as the addition of new medical orders, would fit with the Stream structure, queries of the case history are not expected to produce streaming results, and so the mutable asset model is a better fit than a Stream-based model.
 
 Failure recovery in the CDS alert system may be modelled using the Try monad, so that results can be reported as Success or Failure. A Success response is a wrapper around a result from the successful execution of a request. A Failure response includes information about the nature of the failure (e.g. timeout exception) so that the system can recover appropriately, e.g. by escalating to another recipient.
 
@@ -644,7 +649,7 @@ A possible extension of the CDS which allows a streaming model in combination wi
 
 %\subsection{Java Implementation of API4KP}
 
-The monad laws have been verified experimentally for SetTree and ListTree monads by implementation in Java8 together with the Functional Java\cite{FJ} libraries, with the source available on Github\footnote{\url{https://github.com/ag-csw/Java4CL}}. Informal tests confirm that the map and join operations are linear in the size of the collection, as expected.
+The monad laws have been verified experimentally for NestedSet and NestedList monads by implementation in Java8 together with the Functional Java\cite{FJ} libraries, with the source available on Github\footnote{\url{https://github.com/ag-csw/Java4CL}}. Informal tests confirm that the map and join operations are linear in the size of the collection, as expected.
 
 %\subsection{Prova API4KP mapping}
 
@@ -673,8 +678,11 @@ The monad laws have been verified experimentally for SetTree and ListTree monads
 \vspace{-0.4cm}
 \section{Related Work and Discussion}
 \label{sec:related}
-%TBD
+%FIXME Davide Hybrid Knowledgebase references
 
+%FIXME Tara OBDA (and RBDA) reference
+
+%FIXME Adrian other related work?
 
 %discussion of approaches for handling state and concurrency for operations on mutable knowledge resources
 
@@ -696,6 +704,9 @@ The API4KP metamodel introduces the following generalizations of DOL concepts:
 \end{itemize}
 
 The variety of monad structures necessary to model the diversity of usecases demonstrates that a high level of abstraction is needed to define operations for modifying knowledge resources - adding, subtracting or modifying. Category theory provides the tools for these abstractions, through applicative functors (a generalization of monads having a binary operator allowing a structure of functions to be applied to another structure), catamorphisms (generalization of aggregation over a list to other monads) and anamorphisms (e.g. generation of a list from a seed and recursion formula).
+% FIXME Tara add references to Eric Meier's et al work and Rx
+% Mention that the nested monad has not yet been
+% studied in this context.
 
 %The Kleisli Query System \cite{Wong2000} has implemented a similar approach for data computations.
 \vspace{-0.3cm}
@@ -704,9 +715,10 @@ The variety of monad structures necessary to model the diversity of usecases dem
 The primary contributions of this paper are two-fold:
 \begin{itemize}
 \item a metamodel of heterogeneous knowledge sources, environments, operations and events, providing an abstract syntax for interaction with the Knowledge Platforms at the core of KDAs
-\item a monadic tree structure derived from other monads, as the conceptual basis of structured knowledge resources, providing a framework that supports modularity, state management, concurrency and exception handling
+\item a structure of nested monads, as the conceptual basis of structured knowledge resources in the metamodel, supporting modularity, state management, concurrency and exception handling.
 \end{itemize}
-We have provided a proof-of-concept of this conceptual framework by application to a usecase from healthcare, identification of implementations employing this approach, as well as mathematical proofs of the monadic character and prototypical implementations of the tree structures.
+We have applied this metamodel to a scenario from healthcare.
+% FIXME Roy make this stronger.
 
 Future work on API4KP may include:
 \begin{itemize}
@@ -717,17 +729,17 @@ operations in terms of catamorphisms and anamorphisms
 
 %\section{Appendix}
 
-%Proof of satisfaction of monad laws by M-trees
+%Proof of satisfaction of monad laws by NestedMs
 % Note - a shorter proof could probably be obtained using Kleisli's
 %[Functor Identity] map(id)(y) = y
-%To verify the Functor Identity law for an M-tree, it is sufficient to show that map$_N$(id) = id. 
+%To verify the Functor Identity law for an NestedM, it is sufficient to show that map$_N$(id) = id. 
 %In terms of the definition of map$_N$, 
 %$$ map_N(f) = map_M( bimap(f, map_N(f)) ) $$
 %we must show
 %$$ map_N(id) = map_M( bimap(id, map_N(id)) ) = id $$
 %If x is Left, then bimap(id, _)(x) = (x), so the law holds in the base case.
 %Now suppose x is Right and the law holds for the components of x.
-%Then the law also holds for x. Because M-trees are finite, then %the law holds by induction.
+%Then the law also holds for x. Because NestedMs are finite, then %the law holds by induction.
 %
 %
 %where bimap takes two functions, applying the first if the Either is Left, the second if the Either is Right.
